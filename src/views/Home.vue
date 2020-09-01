@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="content">
     <h1>This is an home page</h1>
     <p>
       <a-radio-group
@@ -19,7 +19,9 @@
         @change="onChange" />
     </p>
     <p>
-      <a-button type="primary">Primary</a-button>
+      <a-button
+        type="primary"
+        @click="addRoute">addRoute</a-button>
       <a-button @click="showMessage">showMessage</a-button>
       <a-button type="dashed">Dashed</a-button>
       <a-button type="danger">Danger</a-button>
@@ -47,6 +49,9 @@ export default {
     },
     showMessage() {
       this.$message.info('This is a normal message');
+    },
+    addRoute() {
+      this.$store.commit('ADD_ROUTE', { path: '/test', name: 'Test', ico: 'wx' });
     },
   },
 };

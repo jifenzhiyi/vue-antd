@@ -2,8 +2,10 @@
   <a-config-provider :locale="language">
     <div id="app">
       <div id="nav">
-        <router-link to="/"><svg-icon iconClass="wx" />Home</router-link> |
-        <router-link to="/about"><svg-icon iconClass="qq" />About</router-link>
+        <router-link
+          v-for="item in routes"
+          :key="item.name"
+          :to="item.path"><svg-icon :iconClass="item.ico" />{{ item.name }}</router-link>
       </div>
       <router-view />
     </div>
@@ -15,7 +17,7 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'App',
-  computed: mapState(['language']),
+  computed: mapState(['language', 'routes']),
 };
 </script>
 
@@ -32,8 +34,9 @@ export default {
   padding: 30px;
 
   a {
-    font-weight: bold;
     color: #2c3e50;
+    font-weight: bold;
+    margin-right: 10px;
 
     &.router-link-exact-active {
       color: #42b983;
