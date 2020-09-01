@@ -1,12 +1,23 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <a-config-provider :locale="language">
+    <div id="app">
+      <div id="nav">
+        <router-link to="/"><svg-icon iconClass="wx" />Home</router-link> |
+        <router-link to="/about"><svg-icon iconClass="qq" />About</router-link>
+      </div>
+      <router-view />
     </div>
-    <router-view/>
-  </div>
+  </a-config-provider>
 </template>
+
+<script>
+import { mapState } from 'vuex';
+
+export default {
+  name: 'App',
+  computed: mapState(['language']),
+};
+</script>
 
 <style lang="less">
 #app {
