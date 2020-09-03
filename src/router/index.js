@@ -1,36 +1,34 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from '@/store';
+import storage from '@/utils/storage';
+import Home from '@/views/Home';
+import Login from '@/views/Login';
+import Redirect from 'comps/Redirect';
+import notFound from 'comps/404';
 
 Vue.use(VueRouter);
 
-// const routes = [
-//   {
-//     path: '/',
-//     name: 'Home',
-//     component: Home,
-//   },
-//   {
-//     path: '/about',
-//     name: 'About',
-//     // route level code-splitting
-//     // this generates a separate chunk (about.[hash].js) for this route
-//     // which is lazy-loaded when the route is visited.
-//     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-//   },
-// ];
+const routes = [
+  { path: '/', redirect: '/home' },
+  {
+    path: '/home', name: 'home', component: Home, meta: { requiresAuth: true },
+  },
+  { path: '/login', name: 'login', component: Login },
+  { path: '/redirect/:path*', component: Redirect },
+  { path: '*', name: 'notFound', component: notFound },
+];
 
-const routes = store.state.routes.map((one) => {
-  // eslint-disable-next-line prefer-template
-  one.component = () => import(/* webpackChunkName: "page" */ '../views/' + one.name + '.vue');
-  return one;
-});
-routes.push({ path: '*', component: () => import(/* webpackChunkName: "page" */ '../components/404.vue') });
-
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes,
+const router = new VueRouter({ mode: 'history', routes });
+// 导航守卫
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.meta && (to.meta.requiresAuth || false);
+  const userToken = storage.get('userToken');
+  const needLogin = requiresAuth && !userToken;
+  if (needLogin) {
+    next({ path: '/login' });
+    return;
+  }
+  next();
 });
 
 window.router = router;

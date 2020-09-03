@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    '@vue/cli-plugin-babel/preset',
+    '@vue/app',
   ],
   plugins: [
     [
@@ -8,7 +8,7 @@ module.exports = {
       {
         libraryName: 'ant-design-vue',
         libraryDirectory: 'es',
-        style: 'css',
+        style: true,
       },
     ],
   ],
