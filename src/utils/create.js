@@ -1,5 +1,8 @@
 import Vue from 'vue';
+import SvgIcon from 'comps/SvgIcon';
 import MessageBox from 'comps/public/MessageBox';
+
+Vue.component('svg-icon', SvgIcon);
 
 export default {
   initNotice(params) {

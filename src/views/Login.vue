@@ -12,7 +12,7 @@
         <h4>仓储管理系统</h4>
         <a-form-item>
           <a-input
-            v-decorator="[ 'username', { rules: [{ required: true, message: '账号不能为空' }] } ]"
+            v-decorator="[ 'account', { rules: [{ required: true, message: '账号不能为空' }] } ]"
             placeholder="请输入账号">
             <a-icon
               slot="prefix"
@@ -44,6 +44,7 @@
 
 <script>
 import storage from '@/utils/storage';
+import { login } from './api';
 
 export default {
   name: 'Login',
@@ -56,22 +57,16 @@ export default {
       this.form.validateFields((err, values) => !err && this.login(values));
     },
     async login(values) {
-      // this.$notice_confirm({
-      //   minfo: '确认登录该系统？',
-      //   func: () => {
-      //     console.log('111111');
-      //   },
-      // });
-      if (values.username === 'manager' && values.password === '000000') {
+      const res = await login(values);
+      if (res) {
         this.$notice_success({
           minfo: '登录成功',
           func: () => {
-            storage.set('userToken', 'test');
+            storage.set('userToken', res.data.accessToken);
+            storage.set('userName', res.data.name);
             this.$router.push('/home');
           },
         });
-      } else {
-        this.$notice_error({ minfo: '账号或密码输入错误，请重试', duration: 3000 });
       }
     },
   },

@@ -1,6 +1,12 @@
 <template>
   <div class="content">
     <h1>This is an home page</h1>
+    <div id="nav">
+      <router-link
+        v-for="item in routes"
+        :key="item.name"
+        :to="item.path"><svg-icon :iconClass="item.ico" />{{ item.name }}</router-link>
+    </div>
     <p>
       <a-radio-group
         :value="locale"
@@ -24,15 +30,20 @@
         @click="addRoute">addRoute</a-button>
       <a-button @click="showMessage">showMessage</a-button>
       <a-button type="dashed">Dashed</a-button>
-      <a-button type="danger">Danger</a-button>
+      <a-button
+        type="danger"
+        @click="logout">退出登录</a-button>
     </p>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import storage from '@/utils/storage';
 
 export default {
   name: 'Home',
+  computed: mapState(['routes']),
   data() {
     return {
       value: '',
@@ -51,7 +62,16 @@ export default {
       this.$message.info('This is a normal message');
     },
     addRoute() {
-      this.$store.commit('ADD_ROUTE', { path: '/test', name: 'Test', ico: 'wx' });
+      this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About', ico: 'qq' });
+    },
+    logout() {
+      this.$notice_confirm({
+        minfo: '确认退出该系统？',
+        func: () => {
+          storage.clear();
+          this.$router.push('/login');
+        },
+      });
     },
   },
 };

@@ -9,7 +9,7 @@
       <div class="info ellipsis3">{{ minfo }}</div>
       <div :class="['btn', mtype === 'confirm' && 'confirm']">
         <a-button
-          :type="mtype === 'confirm' ? 'primary' : ''"
+          :type="mtype !== 'success' ? 'danger' : ''"
           @click="submit">确定</a-button>
         <a-button
           v-if="mtype === 'confirm'"

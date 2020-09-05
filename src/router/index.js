@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import storage from '@/utils/storage';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
+import Layout from 'comps/Layouts';
 import Redirect from 'comps/Redirect';
 import notFound from 'comps/404';
 
@@ -11,7 +12,11 @@ Vue.use(VueRouter);
 const routes = [
   { path: '/', redirect: '/home' },
   {
-    path: '/home', name: 'home', component: Home, meta: { requiresAuth: true },
+    path: '/',
+    component: Layout,
+    children: [
+      { path: '/home', component: Home, meta: { requiresAuth: true } },
+    ],
   },
   { path: '/login', name: 'login', component: Login },
   { path: '/redirect/:path*', component: Redirect },

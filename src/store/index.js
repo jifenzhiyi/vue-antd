@@ -9,12 +9,16 @@ export default new Vuex.Store({
   state: {
     CNorEN: true, // 中英文
     language: zhCN,
+    isFold: true, // 导航是否展开
     routes: [
       { path: '/', name: 'Home', ico: 'wx' },
-      { path: '/about', name: 'About', ico: 'qq' },
     ],
   },
   mutations: {
+    // 导航展开
+    CHANGE_ISFOLD(state) {
+      state.isFold = !state.isFold;
+    },
     // 中英文切换
     CHANGE_LOCALE(state) {
       state.CNorEN = !state.CNorEN;
@@ -32,6 +36,7 @@ export default new Vuex.Store({
         window.router.addRoutes([{
           path: route.path,
           name: route.name,
+          meta: { requiresAuth: true },
           // eslint-disable-next-line prefer-template
           component: () => import(/* webpackChunkName: "page" */ '../views/' + route.name + '.vue'),
         }]);

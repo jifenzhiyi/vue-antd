@@ -1,15 +1,9 @@
 <template>
-  <a-config-provider :locale="language">
-    <div id="app">
-      <!-- <div id="nav">
-        <router-link
-          v-for="item in routes"
-          :key="item.name"
-          :to="item.path"><svg-icon :iconClass="item.ico" />{{ item.name }}</router-link>
-      </div> -->
+  <div id="app">
+    <a-config-provider :locale="language">
       <router-view />
-    </div>
-  </a-config-provider>
+    </a-config-provider>
+  </div>
 </template>
 
 <script>
@@ -17,6 +11,6 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'App',
-  computed: mapState(['language', 'routes']),
+  computed: mapState(['language']),
 };
 </script>
