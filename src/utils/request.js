@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { END_POINT } from '@/config';
 import { Modal } from 'ant-design-vue';
+import storage from '@/utils/storage';
 
 // 请求拦截
 const defaultRequestInterceptors = (config) => config;
@@ -24,6 +25,8 @@ class Request {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      params: {},
+      data: {},
       timeout: 10000, // 单位毫秒
     };
     if (options.headers) {
@@ -49,6 +52,12 @@ class Request {
     let newConfig = { ...this.config };
     newConfig = Object.assign(newConfig, options);
     newConfig.url = url;
+    newConfig.method === 'GET'
+      ? newConfig.params.accessToken = storage.get('userToken')
+      : newConfig.data.accessToken = storage.get('userToken');
+    newConfig.method === 'GET'
+      ? newConfig.data = null
+      : newConfig.params = null;
     params && params.isLoading && this.startLoading();
     return this.client.request(newConfig)
       .then((res) => {
@@ -59,7 +68,13 @@ class Request {
           return null;
         }
         if (res.data && res.data.code !== '0000') {
-          Modal.error({ title: '错误信息', content: res.data.msg });
+          Modal.error({
+            title: '错误信息',
+            content: res.data.msg,
+            onOk() {
+              res.data.code === '0006' && (window.location.href = '/login');
+            },
+          });
           return null;
         }
         return res.data;

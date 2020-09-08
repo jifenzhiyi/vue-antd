@@ -1,12 +1,6 @@
 <template>
   <div class="content">
     <h1>This is an home page</h1>
-    <div id="nav">
-      <router-link
-        v-for="item in routes"
-        :key="item.name"
-        :to="item.path"><svg-icon :iconClass="item.ico" />{{ item.name }}</router-link>
-    </div>
     <p>
       <a-radio-group
         :value="locale"
@@ -49,6 +43,11 @@ export default {
       value: '',
       locale: '中文',
     };
+  },
+  created() {
+    console.log('home created');
+    // this.$router.addRoute({ path: '/about', name: 'about', component: () => import('@/views/About') });
+    // this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About' });
   },
   methods: {
     changeLocale(e) {

@@ -44,10 +44,12 @@
 
 <script>
 import storage from '@/utils/storage';
+import role from '@/mixins/role';
 import { login } from './api';
 
 export default {
   name: 'Login',
+  mixins: [role],
   beforeCreate() {
     this.form = this.$form.createForm(this, { name: 'normal_login' });
   },
@@ -59,14 +61,10 @@ export default {
     async login(values) {
       const res = await login(values);
       if (res) {
-        this.$notice_success({
-          minfo: '登录成功',
-          func: () => {
-            storage.set('userToken', res.data.accessToken);
-            storage.set('userName', res.data.name);
-            this.$router.push('/home');
-          },
-        });
+        storage.set('userName', res.data.name);
+        storage.set('userToken', res.data.accessToken);
+        this.queryRoleMenu();
+        this.$notice_success({ minfo: '登录成功', func: () => this.$router.push('/home') });
       }
     },
   },

@@ -15,7 +15,18 @@ const routes = [
     path: '/',
     component: Layout,
     children: [
-      { path: '/home', component: Home, meta: { requiresAuth: true } },
+      {
+        path: '/home',
+        name: 'home',
+        component: Home,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/list',
+        name: 'list',
+        component: () => import(/* webpackChunkName: "page" */ '../views/List/index.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   { path: '/login', name: 'login', component: Login },

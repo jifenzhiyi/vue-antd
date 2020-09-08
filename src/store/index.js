@@ -2,19 +2,35 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import zhCN from 'ant-design-vue/es/locale-provider/zh_CN';
 import enGB from 'ant-design-vue/es/locale-provider/en_GB';
+import storage from '@/utils/storage';
+// import routes from './routes';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     CNorEN: true, // 中英文
-    language: zhCN,
+    language: zhCN, // 语言包
     isFold: true, // 导航是否展开
-    routes: [
-      { path: '/', name: 'Home', ico: 'wx' },
-    ],
+    ajaxConfig: storage.get('ajax_config') || '/home',
+    routes: [],
+  },
+  getters: {
+    asideList(state) {
+      return state.routes.length > 0 ? state.routes.filter((o) => o.isSelect)[0].children : [];
+    },
   },
   mutations: {
+    // 一级菜单选中
+    SET_ROUTES_SELECT(state, name) {
+      state.routes.forEach((one) => {
+        one.isSelect = one.name === name;
+      });
+    },
+    // 接口请求参数设置
+    SET_AJAX_CONFIG(state, config) {
+      state.ajaxConfig = config;
+    },
     // 导航展开
     CHANGE_ISFOLD(state) {
       state.isFold = !state.isFold;
@@ -25,21 +41,14 @@ export default new Vuex.Store({
       state.CNorEN ? state.language = zhCN : state.language = enGB;
     },
     // 定制化路由
-    SET_ROUTES(state, routes) {
-      state.routes = routes;
-      window.router.addRoutes(routes);
+    SET_ROUTES(state, routeList) {
+      state.routes = routeList;
+      // window.router.addRoutes(routeList);
     },
     ADD_ROUTE(state, route) {
       const item = state.routes.find((one) => one.name === route.name);
       if (!item) {
         state.routes.push(route);
-        window.router.addRoutes([{
-          path: route.path,
-          name: route.name,
-          meta: { requiresAuth: true },
-          // eslint-disable-next-line prefer-template
-          component: () => import(/* webpackChunkName: "page" */ '../views/' + route.name + '.vue'),
-        }]);
       }
     },
     REMOVE_ROUTE(state, name) {

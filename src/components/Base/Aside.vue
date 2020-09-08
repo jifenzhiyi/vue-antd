@@ -4,78 +4,72 @@
     <a-menu
       class="menu"
       mode="inline"
-      :inline-collapsed="!isFold">
+      v-model="current"
+      :default-open-keys="openKeys"
+      :inline-collapsed="!isFold"
+      @openChange="openChange"
+      @select="select">
       <template
-        v-for="item in list">
+        v-for="item in asideList">
         <a-sub-menu
           v-if="item.children"
-          :key="item.title">
+          :key="item.url">
           <span slot="title">
-            <a-icon type="mail" />
-            <span>{{ item.title }}</span>
+            <a-icon :type="item.icon" />
+            <span>{{ item.name }}</span>
           </span>
           <a-menu-item
             v-for="one in item.children"
-            :key="one.title">
-            <a-icon type="pie-chart" />
-            <span>{{ one.title }}</span></a-menu-item>
+            :key="one.url"
+            @click="itemClick(one.type)">
+            <a-icon :type="one.icon" />
+            <span>{{ one.name }}</span></a-menu-item>
         </a-sub-menu>
         <a-menu-item
           v-else
-          :key="item.title">
-          <a-icon type="pie-chart" />
-          <span>{{ item.title }}</span></a-menu-item>
+          :key="item.url"
+          @click="itemClick(item.type)">
+          <a-icon :type="item.icon" />
+          <span>{{ item.name }}</span></a-menu-item>
       </template>
     </a-menu>
   </aside>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
+import storage from '@/utils/storage';
 
 export default {
   name: 'BaseAside',
-  computed: mapState(['isFold', 'routes']),
+  computed: {
+    ...mapState(['isFold', 'routes']),
+    ...mapGetters(['asideList']),
+  },
   data() {
     return {
-      openKeys: ['sub1'],
-      list: [
-        {
-          title: '数据概览',
-          url: '/next',
-        },
-        {
-          title: '仓库信息',
-          children: [
-            {
-              title: '产品信息',
-              url: '/next',
-            },
-            {
-              title: '货主信息',
-              url: '/next',
-            },
-          ],
-        },
-        {
-          title: '仓库配置',
-          children: [
-            {
-              title: '货架信息',
-              url: '/next',
-            },
-            {
-              title: '库位信息',
-              url: '/next',
-            },
-          ],
-        },
-      ],
+      current: storage.get('aside_current') || [],
+      openKeys: storage.get('aside_openKeys') || [],
     };
   },
+  watch: {
+    current() {
+      const item = this.routes.filter((o) => o.isSelect)[0];
+      storage.set('header_current', [item.name]);
+      storage.set('aside_current', this.current);
+      storage.set('aside_openKeys', this.openKeys);
+    },
+  },
   methods: {
-    handleClick(e) {
-      console.log('handleClick e', e);
+    openChange(val) {
+      this.openKeys = val;
+    },
+    select(val) {
+      storage.set('ajax_config', val.key);
+      this.$store.commit('SET_AJAX_CONFIG', val.key);
+    },
+    itemClick(type) {
+      `/${type}` !== this.$route.path && this.$router.push(`/${type}`);
     },
   },
 };

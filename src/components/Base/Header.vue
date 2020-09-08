@@ -12,16 +12,20 @@
         mode="horizontal">
         <a-menu-item
           v-for="item in routes"
-          :key="item.name">{{ item.name }}</a-menu-item>
+          :key="item.name">
+          <a-icon :type="item.icon" />
+          {{ item.name }}</a-menu-item>
       </a-menu>
     </nav>
     <!--仓库选择-->
     <a-select
       class="select"
-      default-value="test">
-      <a-select-option value="test">
-        test
-      </a-select-option>
+      v-model="warehouseId"
+      @change="warehouseChange">
+      <a-select-option
+        v-for="item in warehouseIds"
+        :key="item"
+        :value="item"> {{ item }}</a-select-option>
     </a-select>
     <!--用户设置-->
     <a-dropdown class="setting">
@@ -59,13 +63,23 @@ export default {
   computed: mapState(['isFold', 'routes']),
   data() {
     return {
-      current: ['Home'],
       name: storage.get('userName'),
+      current: storage.get('header_current') || ['首页'],
+      warehouseIds: storage.get('warehouseIds') || [],
+      warehouseId: storage.get('warehouseId') || '',
     };
+  },
+  watch: {
+    current() {
+      this.$store.commit('SET_ROUTES_SELECT', this.current[0]);
+    },
   },
   methods: {
     changeFold() {
       this.$store.commit('CHANGE_ISFOLD');
+    },
+    warehouseChange(val) {
+      storage.set('warehouseId', val);
     },
     logout() {
       this.$notice_confirm({
@@ -87,8 +101,8 @@ header {
   align-items: center;
   border-bottom: 1px solid #e8e8e8;
   justify-content: space-between;
+  nav { flex: 1; height: 48px; overflow: auto; }
   .icon { padding: 16px; font-size: 20px; }
-  nav { flex: 1; overflow: auto; }
   .select { width: 100px; }
   .setting { padding: 8px 16px; }
 }

@@ -3,6 +3,7 @@
     <base-aside />
     <div class="main">
       <base-header />
+      <div class="content"><router-view /></div>
     </div>
   </div>
 </template>
@@ -27,6 +28,9 @@ export default {
   display: flex;
   .main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    .content { flex: 1; padding: 10px; }
   }
 }
 </style>
