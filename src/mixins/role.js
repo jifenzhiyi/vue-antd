@@ -9,7 +9,9 @@ export default {
         const obj = {};
         obj.name = item.name;
         index === 0 ? obj.icon = item.icon : obj.icon = 'menu';
-        index === 0 && !current ? obj.isSelect = idx === 0 : obj.isSelect = current[0] === item.name;
+        index === 0 && (!current
+          ? obj.isSelect = idx === 0
+          : obj.isSelect = current[0] === item.name);
         if (item.childMenus && item.childMenus.length > 0) {
           obj.children = this.arrayToMap(item.childMenus, 1);
         } else {

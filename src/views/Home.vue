@@ -61,7 +61,8 @@ export default {
       this.$message.info('This is a normal message');
     },
     addRoute() {
-      this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About', ico: 'qq' });
+      console.log('addRoute');
+      // this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About', ico: 'qq' });
     },
     logout() {
       this.$notice_confirm({
