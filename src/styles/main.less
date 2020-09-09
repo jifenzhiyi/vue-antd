@@ -37,7 +37,13 @@ li { list-style:none; }
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+#app, body { height: 100%; overflow: hidden; }
 .middle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-#app { height: 100%; }
 .ant-form-item { margin-bottom: 10px; }
 .ant-form-explain { padding-top: 5px; }
+.ant-tabs-tab {
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  border-right: solid 1px #eee !important;
+}

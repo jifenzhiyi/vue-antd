@@ -12,6 +12,7 @@ import {
   Modal,
   Radio,
   Select,
+  Tabs,
 } from 'ant-design-vue';
 
 Vue.use(Button);
@@ -24,6 +25,7 @@ Vue.use(Input);
 Vue.use(Menu);
 Vue.use(Radio);
 Vue.use(Select);
+Vue.use(Tabs);
 
 Vue.prototype.$message = message;
 Vue.prototype.$modal = Modal;

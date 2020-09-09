@@ -20,14 +20,14 @@
           <a-menu-item
             v-for="one in item.children"
             :key="one.name"
-            @click="itemClick(one.type, one.url)">
+            @click="itemClick(one.type, one.url, one.name)">
             <a-icon :type="one.icon" />
             <span>{{ one.name }}</span></a-menu-item>
         </a-sub-menu>
         <a-menu-item
           v-else
           :key="item.name"
-          @click="itemClick(item.type, item.url)">
+          @click="itemClick(item.type, item.url, item.name)">
           <a-icon :type="item.icon" />
           <span>{{ item.name }}</span></a-menu-item>
       </template>
@@ -70,30 +70,33 @@ export default {
   name: 'BaseAside',
   mixins: [role],
   computed: {
-    ...mapState(['isFold', 'routes']),
+    ...mapState(['isFold', 'routes', 'asideCurrent']),
     ...mapGetters(['asideList']),
   },
   data() {
     return {
-      current: this.$storage.get('aside_current') || [],
+      current: this.$storage.get('aside_current') || ['欢迎'],
       openKeys: this.$storage.get('aside_openKeys') || [],
     };
   },
   watch: {
-    current() {
-      const item = this.routes.filter((o) => o.isSelect)[0];
-      this.$storage.set('header_current', [item.name]);
-      this.$storage.set('aside_current', this.current);
-      this.$storage.set('aside_openKeys', this.openKeys);
+    asideCurrent() {
+      this.current = this.asideCurrent;
     },
   },
   methods: {
     openChange(val) {
       this.openKeys = val;
     },
-    itemClick(type, url) {
-      this.$storage.set('ajax_config', url);
+    currentUpdate(name, url) {
+      const item = this.routes.filter((o) => o.isSelect)[0];
+      this.$store.commit('SET_HEADER_CURRENT', [item.name]);
+      this.$store.commit('SET_ASIDE_CURRENT', [name]);
+      this.$store.commit('ADD_TAB', url);
+    },
+    itemClick(type, url, name) {
       this.$store.commit('SET_AJAX_CONFIG', url);
+      this.currentUpdate(name, url);
       `/${type}` !== this.$route.path && this.$router.push(`/${type}`);
       !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD'), 300);
     },

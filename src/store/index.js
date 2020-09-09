@@ -4,6 +4,7 @@ import zhCN from 'ant-design-vue/es/locale-provider/zh_CN';
 import enGB from 'ant-design-vue/es/locale-provider/en_GB';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
+import localInit from './plugins/localInit';
 // import routes from './routes';
 
 Vue.use(Vuex);
@@ -13,8 +14,15 @@ export default new Vuex.Store({
     CNorEN: true, // 中英文
     language: zhCN, // 语言包
     isFold: isPC(), // 导航是否展开
-    ajaxConfig: storage.get('ajax_config') || '/home',
+    headerCurrent: storage.get('header_current') || ['首页'],
+    asideCurrent: storage.get('aside_current') || ['欢迎'],
+    ajaxConfig: storage.get('ajax_config') || '/welcome',
     routes: [],
+    tabList: [
+      {
+        h: '首页', title: '欢迎', key: '/welcome', closable: false,
+      },
+    ],
   },
   getters: {
     asideList(state) {
@@ -22,6 +30,28 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    SET_HEADER_CURRENT(state, current) {
+      state.headerCurrent = current;
+    },
+    SET_ASIDE_CURRENT(state, current) {
+      state.asideCurrent = current;
+    },
+    // 设置标签
+    SET_TAB_LIST(state, list) {
+      state.tabList = list;
+    },
+    // 添加标签
+    ADD_TAB(state, key) {
+      const headerCurrent = storage.get('header_current')[0];
+      const asideCurrent = storage.get('aside_current')[0];
+      const item = state.tabList.find((one) => one.key === key);
+      !item && state.tabList.push({ h: headerCurrent, title: asideCurrent, key: state.ajaxConfig });
+    },
+    // 删除标签
+    REMOVE_TAB(state, key) {
+      const index = state.tabList.findIndex((o) => o.key === key);
+      state.tabList.splice(index, 1);
+    },
     // 一级菜单选中
     SET_ROUTES_SELECT(state, name) {
       state.routes.forEach((one) => {
@@ -34,7 +64,6 @@ export default new Vuex.Store({
     },
     // 导航展开
     CHANGE_ISFOLD(state, flag) {
-      console.log('CHANGE_ISFOLD falg', flag);
       flag == null ? state.isFold = !state.isFold : state.isFold = flag;
     },
     // 中英文切换
@@ -61,4 +90,5 @@ export default new Vuex.Store({
   },
   modules: {
   },
+  plugins: [localInit],
 });

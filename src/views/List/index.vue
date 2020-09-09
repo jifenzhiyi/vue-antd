@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     列表页 {{ ajaxConfig }}
   </div>
 </template>
@@ -12,3 +12,12 @@ export default {
   computed: mapState(['ajaxConfig']),
 };
 </script>
+
+<style lang="less" scoped>
+.main {
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+  border: solid 1px #eee;
+}
+</style>

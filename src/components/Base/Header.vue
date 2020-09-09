@@ -8,8 +8,9 @@
     <!--1级菜单-->
     <nav :class="!$isPC() && 'mobile'">
       <a-menu
+        mode="horizontal"
         v-model="current"
-        mode="horizontal">
+        :class="!$isPC() && 'mobile'">
         <a-menu-item
           v-for="item in routes"
           :key="item.name">
@@ -65,7 +66,7 @@ import role from '@/mixins/role';
 export default {
   name: 'BaseHeader',
   mixins: [role],
-  computed: mapState(['isFold', 'routes']),
+  computed: mapState(['isFold', 'routes', 'headerCurrent']),
   data() {
     return {
       current: this.$storage.get('header_current') || ['首页'],
@@ -76,6 +77,9 @@ export default {
       // 顶部导航选中
       this.$store.commit('SET_ROUTES_SELECT', this.current[0]);
       !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', true);
+    },
+    headerCurrent() {
+      this.current = this.headerCurrent;
     },
   },
   methods: {
@@ -100,4 +104,5 @@ header {
   .select { width: 100px; }
   .setting { padding: 8px 16px; }
 }
+.anticon { padding-right: 5px; }
 </style>

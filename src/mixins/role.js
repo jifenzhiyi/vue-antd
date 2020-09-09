@@ -40,9 +40,9 @@ export default {
     },
     initStorage() {
       const asideCurrent = storage.get('aside_current');
-      !asideCurrent && storage.set('aside_current', ['/home']);
+      !asideCurrent && storage.set('aside_current', ['欢迎']);
       const ajaxConfig = storage.get('ajax_config');
-      !ajaxConfig && storage.set('ajax_config', '/home');
+      !ajaxConfig && storage.set('ajax_config', '/welcome');
       const asideOpenKeys = storage.get('aside_openKeys');
       !asideOpenKeys && storage.set('aside_openKeys', []);
     },
@@ -55,8 +55,11 @@ export default {
       this.$notice_confirm({
         minfo: '是否确认退出？',
         func: () => {
+          !this.$isPC() && this.$store.commit('CHANGE_ISFOLD');
+          this.$store.commit('SET_TAB_LIST', [{
+            h: '首页', title: '欢迎', key: '/welcome', closable: false,
+          }]);
           this.$storage.clear();
-          this.$store.commit('CHANGE_ISFOLD');
           this.$router.push('/login');
         },
       });

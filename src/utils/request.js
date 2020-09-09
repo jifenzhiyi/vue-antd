@@ -61,7 +61,6 @@ class Request {
     params && params.isLoading && this.startLoading();
     return this.client.request(newConfig)
       .then((res) => {
-        console.log('send res', res);
         params && params.isLoading && this.stopLoading();
         if (res.data && res.status !== 200) {
           // TODO ajax请求失败

@@ -3,6 +3,7 @@
     <base-aside />
     <div class="main">
       <base-header />
+      <base-tab />
       <div
         class="content"
         @click="hideAside"><router-view /></div>
@@ -12,12 +13,14 @@
 
 <script>
 import baseHeader from 'comps/Base/Header';
+import baseTab from 'comps/Base/Tab';
 import baseAside from 'comps/Base/Aside';
 
 export default {
   name: 'Layouts',
   components: {
     baseHeader,
+    baseTab,
     baseAside,
   },
   methods: {
@@ -40,7 +43,11 @@ export default {
     display: flex;
     overflow: hidden;
     flex-direction: column;
-    .content { flex: 1; padding: 10px; }
+    .content {
+      flex: 1;
+      padding: 10px;
+      background: #f8f8f8;
+    }
   }
 }
 </style>
