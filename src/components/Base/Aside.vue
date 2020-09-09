@@ -98,7 +98,7 @@ export default {
       this.$store.commit('SET_AJAX_CONFIG', url);
       this.currentUpdate(name, url);
       `/${type}` !== this.$route.path && this.$router.push(`/${type}`);
-      !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD'), 300);
+      !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
     },
   },
 };

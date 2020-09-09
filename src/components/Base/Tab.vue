@@ -42,7 +42,7 @@ export default {
         this.$store.commit('SET_AJAX_CONFIG', url);
         url === '/welcome' && this.$route.path !== '/home' && this.$router.push('/home');
         url !== '/welcome' && this.$route.path !== '/list' && this.$router.push('/list');
-        !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD'), 300);
+        !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
       }
     },
     onEdit(targetKey, action) {
