@@ -3,7 +3,9 @@
     <base-aside />
     <div class="main">
       <base-header />
-      <div class="content"><router-view /></div>
+      <div
+        class="content"
+        @click="hideAside"><router-view /></div>
     </div>
   </div>
 </template>
@@ -18,6 +20,12 @@ export default {
     baseHeader,
     baseAside,
   },
+  methods: {
+    hideAside() {
+      console.log('hideAside');
+      !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', false);
+    },
+  },
 };
 </script>
 
@@ -26,9 +34,11 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: hidden;
   .main {
     flex: 1;
     display: flex;
+    overflow: hidden;
     flex-direction: column;
     .content { flex: 1; padding: 10px; }
   }

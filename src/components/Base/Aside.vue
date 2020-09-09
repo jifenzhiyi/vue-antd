@@ -1,5 +1,5 @@
 <template>
-  <aside :class="isFold ? 'fold' : ''">
+  <aside :class="[isFold ? 'fold' : '', $isPC() ? 'isPC' : 'isMobile']">
     <div class="logo">LOGO</div>
     <a-menu
       class="menu"
@@ -7,69 +7,95 @@
       v-model="current"
       :default-open-keys="openKeys"
       :inline-collapsed="!isFold"
-      @openChange="openChange"
-      @select="select">
+      @openChange="openChange">
       <template
         v-for="item in asideList">
         <a-sub-menu
           v-if="item.children"
-          :key="item.url">
+          :key="item.name">
           <span slot="title">
             <a-icon :type="item.icon" />
             <span>{{ item.name }}</span>
           </span>
           <a-menu-item
             v-for="one in item.children"
-            :key="one.url"
-            @click="itemClick(one.type)">
+            :key="one.name"
+            @click="itemClick(one.type, one.url)">
             <a-icon :type="one.icon" />
             <span>{{ one.name }}</span></a-menu-item>
         </a-sub-menu>
         <a-menu-item
           v-else
-          :key="item.url"
-          @click="itemClick(item.type)">
+          :key="item.name"
+          @click="itemClick(item.type, item.url)">
           <a-icon :type="item.icon" />
           <span>{{ item.name }}</span></a-menu-item>
       </template>
     </a-menu>
+    <!--仓库选择-->
+    <div
+      v-show="isFold"
+      v-if="!$isPC()"
+      class="label">
+      <span>仓库：</span>
+      <a-select
+        class="select"
+        v-model="warehouseId"
+        @change="warehouseChange">
+        <a-select-option
+          v-for="item in warehouseIds"
+          :key="item"
+          :value="item"> {{ item }}</a-select-option>
+      </a-select>
+    </div>
+    <!--用户设置-->
+    <div
+      v-show="isFold"
+      v-if="!$isPC()"
+      class="userInfo">
+      <span>用户：manager</span>
+      <a @click="logout">
+        <a-icon
+          slot="icon"
+          type="logout" />退出登录</a>
+      </div>
   </aside>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import storage from '@/utils/storage';
+import role from '@/mixins/role';
 
 export default {
   name: 'BaseAside',
+  mixins: [role],
   computed: {
     ...mapState(['isFold', 'routes']),
     ...mapGetters(['asideList']),
   },
   data() {
     return {
-      current: storage.get('aside_current') || [],
-      openKeys: storage.get('aside_openKeys') || [],
+      current: this.$storage.get('aside_current') || [],
+      openKeys: this.$storage.get('aside_openKeys') || [],
     };
   },
   watch: {
     current() {
       const item = this.routes.filter((o) => o.isSelect)[0];
-      storage.set('header_current', [item.name]);
-      storage.set('aside_current', this.current);
-      storage.set('aside_openKeys', this.openKeys);
+      this.$storage.set('header_current', [item.name]);
+      this.$storage.set('aside_current', this.current);
+      this.$storage.set('aside_openKeys', this.openKeys);
     },
   },
   methods: {
     openChange(val) {
       this.openKeys = val;
     },
-    select(val) {
-      storage.set('ajax_config', val.key);
-      this.$store.commit('SET_AJAX_CONFIG', val.key);
-    },
-    itemClick(type) {
+    itemClick(type, url) {
+      this.$storage.set('ajax_config', url);
+      this.$store.commit('SET_AJAX_CONFIG', url);
       `/${type}` !== this.$route.path && this.$router.push(`/${type}`);
+      !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD'), 300);
     },
   },
 };
@@ -77,12 +103,20 @@ export default {
 
 <style lang="less" scoped>
 aside {
-  width: 80px;
   display: flex;
+  overflow: hidden;
   align-items: center;
   transition: all 0.5s;
   flex-direction: column;
   border-right: solid 1px #f0f0f0;
+  &.isPC { width: 80px }
+  &.isMobile {
+    width: 0px;
+    z-index: 10;
+    background: #fff;
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+  }
   &.fold { width: 180px; }
   .logo {
     width: 100%;
@@ -91,7 +125,29 @@ aside {
     text-align: center;
   }
   .menu {
+    flex: 1;
     border-right: 0;
+  }
+  .label {
+    width: 100%;
+    padding-left: 20px;
+    .select { width: 100px; }
+  }
+  .userInfo {
+    width: 100%;
+    height: 84px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    span { height: 32px; line-height: 32px;}
+    a {
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      border-radius: 8px;
+      border: solid 1px #f00;
+      .anticon { padding-right: 10px; }
+    }
   }
 }
 </style>

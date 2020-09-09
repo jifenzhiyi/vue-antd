@@ -40,6 +40,6 @@ export default {
   overflow: hidden;
   margin-right: 5px;
   fill: currentColor;
-  vertical-align: -0.15em;
+  vertical-align: -0.2em;
 }
 </style>

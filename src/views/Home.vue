@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <h1>This is an home page</h1>
+    <h2>{{ $isPC() ? '电脑端' : '手机端' }}</h2>
     <p>
       <a-radio-group
         :value="locale"
@@ -44,11 +45,6 @@ export default {
       locale: '中文',
     };
   },
-  created() {
-    console.log('home created');
-    // this.$router.addRoute({ path: '/about', name: 'about', component: () => import('@/views/About') });
-    // this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About' });
-  },
   methods: {
     changeLocale(e) {
       this.locale = e.target.value;
@@ -62,7 +58,6 @@ export default {
     },
     addRoute() {
       console.log('addRoute');
-      // this.$store.commit('ADD_ROUTE', { path: '/about', name: 'About', ico: 'qq' });
     },
     logout() {
       this.$notice_confirm({
