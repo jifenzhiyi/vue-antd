@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     hideAside() {
-      console.log('hideAside');
       !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', false);
     },
   },
@@ -46,6 +45,8 @@ export default {
     .content {
       flex: 1;
       padding: 10px;
+      overflow: hidden;
+      position: relative;
       background: #f8f8f8;
     }
   }

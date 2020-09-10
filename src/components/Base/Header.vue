@@ -73,6 +73,9 @@ export default {
     };
   },
   watch: {
+    warehouseId() {
+      this.$store.commit('SET_WAREHOUSE_ID', this.warehouseId);
+    },
     current() {
       // 顶部导航选中
       this.$store.commit('SET_ROUTES_SELECT', this.current[0]);

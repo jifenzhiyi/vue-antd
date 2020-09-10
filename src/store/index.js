@@ -5,7 +5,6 @@ import enGB from 'ant-design-vue/es/locale-provider/en_GB';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
 import localInit from './plugins/localInit';
-// import routes from './routes';
 
 Vue.use(Vuex);
 
@@ -14,6 +13,7 @@ export default new Vuex.Store({
     CNorEN: true, // 中英文
     language: zhCN, // 语言包
     isFold: isPC(), // 导航是否展开
+    warehouseId: storage.get('warehouseId') || '', // 当前选中的仓库id
     headerCurrent: storage.get('header_current') || ['首页'],
     asideCurrent: storage.get('aside_current') || ['欢迎'],
     ajaxConfig: storage.get('ajax_config') || '/welcome',
@@ -30,6 +30,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    SET_WAREHOUSE_ID(state, id) {
+      state.warehouseId = id;
+    },
     SET_HEADER_CURRENT(state, current) {
       state.headerCurrent = current;
     },
@@ -74,16 +77,6 @@ export default new Vuex.Store({
     // 定制化路由
     SET_ROUTES(state, routeList) {
       state.routes = routeList;
-    },
-    ADD_ROUTE(state, route) {
-      const item = state.routes.find((one) => one.name === route.name);
-      if (!item) {
-        state.routes.push(route);
-      }
-    },
-    REMOVE_ROUTE(state, name) {
-      const index = state.routes.findIndex((o) => o.name === name);
-      state.routes.splice(index, 1);
     },
   },
   actions: {

@@ -64,7 +64,15 @@ export default {
         storage.set('userName', res.data.name);
         storage.set('userToken', res.data.accessToken);
         this.queryRoleMenu();
-        this.$notice_success({ minfo: '登录成功', func: () => this.$router.push('/home') });
+        this.$notice_success({
+          minfo: '登录成功',
+          func: () => {
+            const ajaxConfig = storage.get('ajax_config');
+            ajaxConfig && ajaxConfig !== '/welcome'
+              ? this.$router.push('/list')
+              : this.$router.push('/home');
+          },
+        });
       }
     },
   },
