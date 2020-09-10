@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     search(obj) {
-      console.log('search obj', obj);
       this.searchParams = Object.assign(this.searchParams, obj);
       this.getList(obj);
     },
@@ -83,8 +82,8 @@ export default {
       this.tableData = data;
     },
     async getList(filters = null) {
-      console.log('getList filters', filters);
       this.tableData = [];
+      this.columns = [];
       this.loading = true;
       const params = { warehouseId: this.warehouseId, ...this.searchParams, ...filters };
       console.log('list params', params, 'config', this.ajaxConfig);
