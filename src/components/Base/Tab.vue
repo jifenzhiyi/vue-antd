@@ -25,11 +25,17 @@ export default {
     tabClick(url) {
       if (url !== this.ajaxConfig) {
         const item = this.tabList.find((one) => one.key === url);
+        // console.log('item', JSON.stringify(item));
         this.$store.commit('SET_ROUTES_SELECT', item.h);
         this.$store.commit('SET_HEADER_CURRENT', [item.h]);
         this.$store.commit('SET_ASIDE_CURRENT', [item.title]);
         this.$store.commit('SET_AJAX_CONFIG', url);
-        this.$router.push(url);
+        url === '/welcome' && this.$route.path !== '/home' && this.$router.push('/home');
+        if (['/admin', '/authorite'].includes(url) && this.$route.path !== url) {
+          this.$router.push(url);
+        } else {
+          url !== '/welcome' && this.$route.path !== '/list' && this.$router.push('/list');
+        }
         !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
       }
     },

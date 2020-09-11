@@ -13,12 +13,12 @@ export default new Vuex.Store({
     CNorEN: true, // 中英文
     language: zhCN, // 语言包
     isFold: isPC(), // 导航是否展开
-    systemType: storage.get('system_type') || 'welcome', // welcome = 默认管理后台 admin = 超级管理员的管理后台 other = 其他管理后台
-    warehouseId: storage.get('warehouse_id') || '', // 当前选中的仓库id
-    headerCurrent: storage.get('header_current') || ['首页'], // 一级菜单选中
-    asideCurrent: storage.get('aside_current') || ['欢迎'], // 左边栏菜单选中
-    openKeys: storage.get('open_keys') || [], // 左边栏展开的菜单
-    ajaxConfig: storage.get('ajax_config') || '/welcome', // ajax 接口请求参数
+    systemType: storage.get('wms_system_type') || 'welcome', // welcome = 默认管理后台 admin = 超级管理员的管理后台 other = 其他管理后台
+    warehouseId: storage.get('wms_warehouse_id') || '', // 当前选中的仓库id
+    headerCurrent: storage.get('wms_header_current') || ['首页'], // 一级菜单选中
+    asideCurrent: storage.get('wms_aside_current') || ['欢迎'], // 左边栏菜单选中
+    openKeys: storage.get('wms_open_keys') || [], // 左边栏展开的菜单
+    ajaxConfig: storage.get('wms_ajax_config') || '/welcome', // ajax 接口请求参数
     routes: [],
     tabList: [],
   },
@@ -54,10 +54,8 @@ export default new Vuex.Store({
     },
     // 添加标签
     ADD_TAB(state, key) {
-      const headerCurrent = storage.get('header_current')[0];
-      const asideCurrent = storage.get('aside_current')[0];
       const item = state.tabList.find((one) => one.key === key);
-      !item && state.tabList.push({ h: headerCurrent, title: asideCurrent, key: state.ajaxConfig });
+      !item && state.tabList.push({ h: state.headerCurrent[0], title: state.asideCurrent[0], key: state.ajaxConfig });
     },
     // 删除标签
     REMOVE_TAB(state, key) {

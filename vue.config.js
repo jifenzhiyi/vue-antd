@@ -1,4 +1,5 @@
 const path = require('path');
+const htmlConfig = require('./package.json');
 
 const resolve = (dir) => path.join(__dirname, dir);
 
@@ -28,6 +29,10 @@ module.exports = {
     },
   },
   chainWebpack(config) {
+    config.plugin('html').tap((args) => {
+      args[0].title = `管理系统v${htmlConfig.version}`;
+      return args;
+    });
     // 1.项目中默认svg加载规则排除掉icons/svg
     config.module.rule('svg').exclude.add(resolve('src/icons'));
     // 2.svg-loader配置

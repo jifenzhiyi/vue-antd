@@ -62,22 +62,22 @@ export default {
       if (values.account === 'maluAdmin' && values.password === '123456') {
         console.log('超级管理员登录系统');
         this.$store.commit('SET_SYSTEM_TYPE', 'admin');
-        storage.set('user_name', values.account);
-        storage.set('user_token', values.account);
+        storage.set('wms_user_name', values.account);
+        storage.set('wms_user_token', values.account);
         this.queryAdminRoleMenu();
         this.$router.push('/admin');
         return;
       }
       const res = await login(values);
       if (res) {
-        this.$store.commit('SET_SYSTEM_TYPE', 'default');
-        storage.set('user_name', res.data.name);
-        storage.set('user_token', res.data.accessToken);
+        this.$store.commit('SET_SYSTEM_TYPE', 'welcome');
+        storage.set('wms_user_name', res.data.name);
+        storage.set('wms_user_token', res.data.accessToken);
         this.queryRoleMenu();
         this.$notice_success({
           minfo: '登录成功',
           func: () => {
-            const ajaxConfig = storage.get('ajax_config');
+            const ajaxConfig = storage.get('wms_ajax_config');
             ajaxConfig && ajaxConfig !== '/welcome'
               ? this.$router.push('/list')
               : this.$router.push('/home');

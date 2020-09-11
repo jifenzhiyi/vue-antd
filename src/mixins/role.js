@@ -6,8 +6,8 @@ export default {
   computed: mapState(['systemType']),
   data() {
     return {
-      name: this.$storage.get('user_name'), // 管理员账号
-      warehouseIds: this.$storage.get('warehouseIds') || [], // 仓库列表
+      name: this.$storage.get('wms_user_name'), // 管理员账号
+      warehouseIds: this.$storage.get('wms_warehouseIds') || [], // 仓库列表
     };
   },
   methods: {
@@ -26,7 +26,7 @@ export default {
       });
     },
     arrayToMap(arr, index) {
-      const current = storage.get('header_current');
+      const current = storage.get('wms_header_current');
       return arr.map((item, idx) => {
         const obj = {};
         obj.name = item.name;
@@ -47,7 +47,7 @@ export default {
       const res = await queryRoleMenu();
       const menuList = this.arrayToMap(res.data.menuList, 0);
       // TOTO 测试3级菜单
-      const current = storage.get('header_current');
+      const current = storage.get('wms_header_current');
       menuList.push({
         name: 'TEST',
         isSelect: current ? current[0] === 'TEST' : false,
@@ -66,18 +66,19 @@ export default {
       });
 
       this.$store.commit('SET_ROUTES', menuList);
-      storage.set('menu_list', menuList);
-      storage.set('warehouseIds', res.data.warehouseIds);
+      storage.set('wms_warehouseIds', res.data.warehouseIds);
       const warehouseId = storage.get('warehouse_id');
       !warehouseId && this.$store.commit('SET_WAREHOUSE_ID', res.data.warehouseIds[0]);
       this.initStorage();
     },
     initStorage() {
-      const asideCurrent = storage.get('aside_current');
-      !asideCurrent && storage.set('aside_current', ['欢迎']);
-      const ajaxConfig = storage.get('ajax_config');
-      !ajaxConfig && storage.set('ajax_config', `/${this.systemType}`);
-      const tabList = storage.get('tab_list');
+      const headerCurrent = storage.get('wms_header_current');
+      !headerCurrent && this.$store.commit('SET_HEADER_CURRENT', ['首页']);
+      const asideCurrent = storage.get('wms_aside_current');
+      !asideCurrent && this.$store.commit('SET_ASIDE_CURRENT', ['欢迎']);
+      const ajaxConfig = storage.get('wms_ajax_config');
+      !ajaxConfig && this.$store.commit('SET_AJAX_CONFIG', `/${this.systemType}`);
+      const tabList = storage.get('wms_tab_list');
       !tabList && this.$store.commit('SET_TAB_LIST', [
         {
           h: '首页', title: '欢迎', key: `/${this.systemType}`, closable: false,
@@ -107,14 +108,13 @@ export default {
           ],
         },
       ];
-      const current = storage.get('header_current');
+      const current = storage.get('wms_header_current');
       if (current) {
         menuList.forEach((o) => {
           o.isSelect = current[0] === o.name;
         });
       }
       this.$store.commit('SET_ROUTES', menuList);
-      storage.set('menu_list', menuList);
       this.initStorage();
     },
   },
