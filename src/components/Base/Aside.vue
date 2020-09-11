@@ -4,7 +4,8 @@
     <a-menu
       class="menu"
       mode="inline"
-      v-model="current"
+      :selectedKeys="asideCurrent"
+      :default-selected-keys="asideCurrent"
       :default-open-keys="openKeys"
       :inline-collapsed="!isFold"
       @openChange="openChange">
@@ -70,23 +71,12 @@ export default {
   name: 'BaseAside',
   mixins: [role],
   computed: {
-    ...mapState(['isFold', 'routes', 'asideCurrent']),
+    ...mapState(['isFold', 'routes', 'asideCurrent', 'openKeys']),
     ...mapGetters(['asideList']),
-  },
-  data() {
-    return {
-      current: this.$storage.get('aside_current') || ['欢迎'],
-      openKeys: this.$storage.get('aside_openKeys') || [],
-    };
-  },
-  watch: {
-    asideCurrent() {
-      this.current = this.asideCurrent;
-    },
   },
   methods: {
     openChange(val) {
-      this.openKeys = val;
+      this.$store.commit('SET_OPEN_KEYS', val);
     },
     currentUpdate(name, url) {
       const item = this.routes.filter((o) => o.isSelect)[0];

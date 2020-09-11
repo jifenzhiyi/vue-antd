@@ -9,21 +9,21 @@
     <nav :class="!$isPC() && 'mobile'">
       <a-menu
         mode="horizontal"
-        v-model="current"
-        :class="!$isPC() && 'mobile'">
+        :selectedKeys="headerCurrent"
+        :default-selected-keys="headerCurrent"
+        :class="!$isPC() && 'mobile'"
+        @click="handleClick">
         <a-menu-item
           v-for="item in routes"
           :key="item.name">
-          <svg-icon :iconClass="item.icon" />
-          <!-- <a-icon :type="item.icon" /> -->
-          {{ item.name }}</a-menu-item>
+          <svg-icon :iconClass="item.icon" />{{ item.name }}</a-menu-item>
       </a-menu>
     </nav>
     <!--仓库选择-->
     <a-select
       class="select"
-      v-model="warehouseId"
-      v-if="$isPC()"
+      v-if="$isPC() && warehouseIds.length > 0"
+      :value="warehouseId"
       @change="warehouseChange">
       <a-select-option
         v-for="item in warehouseIds"
@@ -42,12 +42,12 @@
           type="user" />{{ name }}
       </a>
       <a-menu slot="overlay">
-        <a-menu-item>
+        <!-- <a-menu-item>
           <a href="javascript:;">
             <a-icon
               slot="icon"
               type="setting" />个人设置</a>
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-item>
           <a @click="logout">
             <a-icon
@@ -66,26 +66,15 @@ import role from '@/mixins/role';
 export default {
   name: 'BaseHeader',
   mixins: [role],
-  computed: mapState(['isFold', 'routes', 'headerCurrent']),
-  data() {
-    return {
-      current: this.$storage.get('header_current') || ['首页'],
-    };
-  },
-  watch: {
-    warehouseId() {
-      this.$store.commit('SET_WAREHOUSE_ID', this.warehouseId);
-    },
-    current() {
-      // 顶部导航选中
-      this.$store.commit('SET_ROUTES_SELECT', this.current[0]);
-      !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', true);
-    },
-    headerCurrent() {
-      this.current = this.headerCurrent;
-    },
-  },
+  computed: mapState(['isFold', 'routes', 'headerCurrent', 'warehouseId']),
   methods: {
+    handleClick(val) {
+      this.$store.commit('SET_ROUTES_SELECT', val.key);
+    },
+    // 更新仓库id
+    warehouseChange(val) {
+      this.$store.commit('SET_WAREHOUSE_ID', val);
+    },
     // 左边栏收起展开
     changeFold() {
       this.$store.commit('CHANGE_ISFOLD');

@@ -24,8 +24,18 @@ const routes = [
       {
         path: '/list',
         name: 'list',
-        component: () => import(/* webpackChunkName: "page" */ '../views/List/index.vue'),
+        component: () => import(/* webpackChunkName: "pages" */ '../views/List/Index.vue'),
         meta: { requiresAuth: true },
+      },
+      {
+        path: '/admin',
+        name: 'adminIndex',
+        component: () => import(/* webpackChunkName: "pages" */ '../views/Admin/Index.vue'),
+      },
+      {
+        path: '/authorite',
+        name: 'authorite',
+        component: () => import(/* webpackChunkName: "pages" */ '../views/Admin/Authorite.vue'),
       },
     ],
   },
@@ -38,7 +48,7 @@ const router = new VueRouter({ mode: 'history', routes });
 // 导航守卫
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta && (to.meta.requiresAuth || false);
-  const userToken = storage.get('userToken');
+  const userToken = storage.get('user_token');
   const needLogin = requiresAuth && !userToken;
   if (needLogin) {
     next({ path: '/login' });

@@ -13,16 +13,14 @@ export default new Vuex.Store({
     CNorEN: true, // 中英文
     language: zhCN, // 语言包
     isFold: isPC(), // 导航是否展开
-    warehouseId: storage.get('warehouseId') || '', // 当前选中的仓库id
-    headerCurrent: storage.get('header_current') || ['首页'],
-    asideCurrent: storage.get('aside_current') || ['欢迎'],
-    ajaxConfig: storage.get('ajax_config') || '/welcome',
+    systemType: storage.get('system_type') || 'welcome', // welcome = 默认管理后台 admin = 超级管理员的管理后台 other = 其他管理后台
+    warehouseId: storage.get('warehouse_id') || '', // 当前选中的仓库id
+    headerCurrent: storage.get('header_current') || ['首页'], // 一级菜单选中
+    asideCurrent: storage.get('aside_current') || ['欢迎'], // 左边栏菜单选中
+    openKeys: storage.get('open_keys') || [], // 左边栏展开的菜单
+    ajaxConfig: storage.get('ajax_config') || '/welcome', // ajax 接口请求参数
     routes: [],
-    tabList: [
-      {
-        h: '首页', title: '欢迎', key: '/welcome', closable: false,
-      },
-    ],
+    tabList: [],
   },
   getters: {
     asideList(state) {
@@ -30,14 +28,25 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    // 设置系统类型
+    SET_SYSTEM_TYPE(state, type) {
+      state.systemType = type;
+    },
+    // 设置仓库ID
     SET_WAREHOUSE_ID(state, id) {
       state.warehouseId = id;
     },
+    // 顶部导航选中
     SET_HEADER_CURRENT(state, current) {
       state.headerCurrent = current;
     },
+    // 侧边栏导航选中
     SET_ASIDE_CURRENT(state, current) {
       state.asideCurrent = current;
+    },
+    // 侧边栏展开
+    SET_OPEN_KEYS(state, keys) {
+      state.openKeys = keys;
     },
     // 设置标签
     SET_TAB_LIST(state, list) {
@@ -79,9 +88,7 @@ export default new Vuex.Store({
       state.routes = routeList;
     },
   },
-  actions: {
-  },
-  modules: {
-  },
+  actions: {},
+  modules: {},
   plugins: [localInit],
 });

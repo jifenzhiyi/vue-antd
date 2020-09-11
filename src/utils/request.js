@@ -53,8 +53,8 @@ class Request {
     newConfig = Object.assign(newConfig, options);
     newConfig.url = url;
     newConfig.method === 'GET'
-      ? newConfig.params.accessToken = storage.get('userToken')
-      : newConfig.data.accessToken = storage.get('userToken');
+      ? newConfig.params.accessToken = storage.get('user_token')
+      : newConfig.data.accessToken = storage.get('user_token');
     newConfig.method === 'GET'
       ? newConfig.data = null
       : newConfig.params = null;

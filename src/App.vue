@@ -13,9 +13,10 @@ import role from '@/mixins/role';
 export default {
   name: 'App',
   mixins: [role],
-  computed: mapState(['language']),
+  computed: mapState(['language', 'systemType']),
   created() {
-    this.$route.name !== 'login' && this.queryRoleMenu();
+    (this.$route.name !== 'login' && this.systemType === 'welcome') && this.queryRoleMenu();
+    (this.$route.name !== 'login' && this.systemType === 'admin') && this.queryAdminRoleMenu();
   },
 };
 </script>

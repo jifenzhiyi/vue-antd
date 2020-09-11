@@ -2,9 +2,9 @@
   <div class="tab_list">
     <a-tabs
       hide-add
-      @edit="onEdit"
-      v-model="activeKey"
       type="editable-card"
+      :activeKey="ajaxConfig"
+      @edit="onEdit"
       @tabClick="tabClick">
       <a-tab-pane
         v-for="one in tabList"
@@ -17,31 +17,19 @@
 
 <script>
 import { mapState } from 'vuex';
-import storage from '@/utils/storage';
 
 export default {
   name: 'BaseTab',
   computed: mapState(['tabList', 'ajaxConfig']),
-  data() {
-    return {
-      activeKey: storage.get('ajax_config') || '/welcome',
-    };
-  },
-  watch: {
-    ajaxConfig() {
-      this.activeKey = this.ajaxConfig;
-    },
-  },
   methods: {
     tabClick(url) {
       if (url !== this.ajaxConfig) {
         const item = this.tabList.find((one) => one.key === url);
+        this.$store.commit('SET_ROUTES_SELECT', item.h);
         this.$store.commit('SET_HEADER_CURRENT', [item.h]);
         this.$store.commit('SET_ASIDE_CURRENT', [item.title]);
-        // this.$storage.set('aside_openKeys', this.openKeys);
         this.$store.commit('SET_AJAX_CONFIG', url);
-        url === '/welcome' && this.$route.path !== '/home' && this.$router.push('/home');
-        url !== '/welcome' && this.$route.path !== '/list' && this.$router.push('/list');
+        this.$router.push(url);
         !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
       }
     },

@@ -59,10 +59,20 @@ export default {
       this.form.validateFields((err, values) => !err && this.login(values));
     },
     async login(values) {
+      if (values.account === 'maluAdmin' && values.password === '123456') {
+        console.log('超级管理员登录系统');
+        this.$store.commit('SET_SYSTEM_TYPE', 'admin');
+        storage.set('user_name', values.account);
+        storage.set('user_token', values.account);
+        this.queryAdminRoleMenu();
+        this.$router.push('/admin');
+        return;
+      }
       const res = await login(values);
       if (res) {
-        storage.set('userName', res.data.name);
-        storage.set('userToken', res.data.accessToken);
+        this.$store.commit('SET_SYSTEM_TYPE', 'default');
+        storage.set('user_name', res.data.name);
+        storage.set('user_token', res.data.accessToken);
         this.queryRoleMenu();
         this.$notice_success({
           minfo: '登录成功',
