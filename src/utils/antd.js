@@ -16,6 +16,7 @@ import {
   Select,
   Table,
   Tabs,
+  Tooltip,
   Upload,
 } from 'ant-design-vue';
 
@@ -33,6 +34,7 @@ Vue.use(Radio);
 Vue.use(Select);
 Vue.use(Table);
 Vue.use(Tabs);
+Vue.use(Tooltip);
 Vue.use(Upload);
 
 Vue.prototype.$message = message;

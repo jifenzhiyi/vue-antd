@@ -41,7 +41,7 @@
       <span>仓库：</span>
       <a-select
         class="select"
-        v-model="warehouseId"
+        :value="warehouseId"
         @change="warehouseChange">
         <a-select-option
           v-for="item in warehouseIds"
@@ -71,7 +71,7 @@ export default {
   name: 'BaseAside',
   mixins: [role],
   computed: {
-    ...mapState(['isFold', 'routes', 'asideCurrent', 'openKeys']),
+    ...mapState(['isFold', 'routes', 'asideCurrent', 'openKeys', 'warehouseId']),
     ...mapGetters(['asideList']),
   },
   methods: {

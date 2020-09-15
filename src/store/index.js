@@ -5,6 +5,7 @@ import enGB from 'ant-design-vue/es/locale-provider/en_GB';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
 import localInit from './plugins/localInit';
+import admin from './admin';
 
 Vue.use(Vuex);
 
@@ -19,8 +20,8 @@ export default new Vuex.Store({
     asideCurrent: storage.get('wms_aside_current') || ['欢迎'], // 左边栏菜单选中
     openKeys: storage.get('wms_open_keys') || [], // 左边栏展开的菜单
     ajaxConfig: storage.get('wms_ajax_config') || '/welcome', // ajax 接口请求参数
+    tabList: storage.get('wms_tab_list') || [],
     routes: [],
-    tabList: [],
   },
   getters: {
     asideList(state) {
@@ -87,6 +88,6 @@ export default new Vuex.Store({
     },
   },
   actions: {},
-  modules: {},
+  modules: { admin },
   plugins: [localInit],
 });

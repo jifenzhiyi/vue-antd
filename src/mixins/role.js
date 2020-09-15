@@ -11,6 +11,10 @@ export default {
     };
   },
   methods: {
+    // 更新仓库id
+    warehouseChange(val) {
+      this.$store.commit('SET_WAREHOUSE_ID', val);
+    },
     // 退出登录
     logout() {
       this.$notice_confirm({

@@ -71,10 +71,6 @@ export default {
     handleClick(val) {
       this.$store.commit('SET_ROUTES_SELECT', val.key);
     },
-    // 更新仓库id
-    warehouseChange(val) {
-      this.$store.commit('SET_WAREHOUSE_ID', val);
-    },
     // 左边栏收起展开
     changeFold() {
       this.$store.commit('CHANGE_ISFOLD');
