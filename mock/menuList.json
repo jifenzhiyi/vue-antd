@@ -58,7 +58,7 @@
       {
         "id": 36,
         "name": "日志信息",
-        "icon": "el-test",
+        "icon": "fa-test",
         "childMenus": [
           {
             "id": 37,

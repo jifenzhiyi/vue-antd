@@ -95,8 +95,8 @@ header {
   nav { flex: 1; height: 48px; overflow: auto; }
   .mobile { width: 70px; overflow: hidden; flex: inherit; }
   .icon { padding: 16px; font-size: 20px; }
-  .select { width: 100px; }
-  .setting { padding: 8px 16px; color: #666 !important; }
+  .select { width: 80px; }
+  .setting { padding: 8px 12px; color: #666 !important; }
 }
 .anticon { padding-right: 5px; }
 </style>
