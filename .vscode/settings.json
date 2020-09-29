@@ -1,0 +1,19 @@
+{
+  "eslint.options": {
+    "configFile": "./.eslintrc.js",
+    "plugins": ["vue"]
+  },
+  "eslint.validate": ["javascript", "javascriptreact", "html", "vue"],
+  "prettier.semi": true,
+  "prettier.printWidth": 120,
+  "editor.formatOnSave": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "prettier.proseWrap": "never",
+  "prettier.arrowParens": "always",
+  "prettier.bracketSpacing": true,
+  "prettier.useEditorConfig": false,
+  "editor.renderControlCharacters": true, // 显示 markdown 中英文切换时产生的特殊字符
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "prettier.jsxBracketSameLine": true
+}
