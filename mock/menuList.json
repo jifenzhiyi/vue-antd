@@ -1,0 +1,76 @@
+{
+  "code": "0000",
+  "data": {
+    "menuList": [
+      {
+        "id": 1,
+        "name": "用户管理",
+        "icon": "fa-user",
+        "childMenus": [
+          {
+            "id": 2,
+            "name": "用户信息",
+            "url": "/userInfo"
+          },
+          {
+            "id": 3,
+            "name": "角色信息",
+            "url": "/roleInfo"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "仓库信息",
+        "icon": "fa-clipboard",
+        "childMenus": [
+          {
+            "id": 5,
+            "name": "货架信息",
+            "url": "/containers"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "name": "任务管理",
+        "icon": "fa-tasks",
+        "childMenus": [
+          {
+            "id": 13,
+            "name": "任务信息",
+            "url": "/tasks"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "name": "库存信息",
+        "icon": "fa-cubes",
+        "childMenus": [
+          {
+            "id": 34,
+            "name": "库存细节",
+            "url": "/inventoryDetails"
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "name": "日志信息",
+        "icon": "el-icon-edit",
+        "childMenus": [
+          {
+            "id": 37,
+            "name": "接口日志",
+            "url": "/apilog"
+          }
+        ]
+      }
+    ],
+    "name": "manager",
+    "warehouseIds": ["cdyq", "test"],
+    "accessToken": "accessToken"
+  },
+  "mag": "请求成功"
+}

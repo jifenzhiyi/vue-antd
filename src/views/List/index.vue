@@ -96,7 +96,7 @@ export default {
       const params = { warehouseId: this.warehouseId, ...this.searchParams, ...filters };
       params.page = this.current;
       params.size = this.pageSize;
-      console.log('list params', params, 'config', this.ajaxConfig);
+      // console.log('list params', params, 'config', this.ajaxConfig);
       // const res = await queryList('/roles', params);
       // console.log('res', res);
       // this.loading = false;

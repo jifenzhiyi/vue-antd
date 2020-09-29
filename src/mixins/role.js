@@ -21,9 +21,14 @@ export default {
         minfo: '是否确认退出？',
         func: () => {
           !this.$isPC() && this.$store.commit('CHANGE_ISFOLD');
-          this.$store.commit('SET_TAB_LIST', [{
-            h: '首页', title: '欢迎', key: '/welcome', closable: false,
-          }]);
+          this.$store.commit('SET_TAB_LIST', [
+            {
+              h: '首页',
+              title: '欢迎',
+              key: '/welcome',
+              closable: false,
+            },
+          ]);
           this.$storage.clear();
           this.$router.push('/login');
         },
@@ -34,14 +39,14 @@ export default {
       return arr.map((item, idx) => {
         const obj = {};
         obj.name = item.name;
-        index === 0 ? obj.icon = item.icon : obj.icon = 'menu';
-        index === 0 && (!current
-          ? obj.isSelect = idx === 0
-          : obj.isSelect = current[0] === item.name);
+        index === 0 ? (obj.icon = item.icon) : (obj.icon = 'menu');
+        if (index === 0) {
+          !current ? (obj.isSelect = idx === 0) : (obj.isSelect = current[0] === item.name);
+        }
         if (item.childMenus && item.childMenus.length > 0) {
           obj.children = this.arrayToMap(item.childMenus, 1);
         } else {
-          item.url === '/welcome' ? obj.type = 'home' : obj.type = 'list';
+          item.url === '/welcome' ? (obj.type = 'home') : (obj.type = 'list');
           obj.url = item.url || item.name;
         }
         return obj;
@@ -49,25 +54,41 @@ export default {
     },
     async queryRoleMenu() {
       const res = await queryRoleMenu();
+      const noHome = res.data.menuList.find((one) => one.name === '首页');
+      if (!noHome) {
+        res.data.menuList.unshift({
+          name: '首页',
+          icon: 'fa-home',
+          childMenus: [
+            {
+              name: '欢迎',
+              url: '/welcome',
+            },
+          ],
+        });
+      }
       const menuList = this.arrayToMap(res.data.menuList, 0);
       // TOTO 测试3级菜单
-      const current = storage.get('wms_header_current');
-      menuList.push({
-        name: 'TEST',
-        isSelect: current ? current[0] === 'TEST' : false,
-        icon: 'fa-test',
-        children: [
-          {
-            name: 'test1',
-            icon: 'menu',
-            children: [
-              {
-                name: 'test1-1', icon: 'pie-chart', type: 'list', url: '/test',
-              },
-            ],
-          },
-        ],
-      });
+      // const current = storage.get('wms_header_current');
+      // menuList.push({
+      //   name: 'TEST',
+      //   isSelect: current ? current[0] === 'TEST' : false,
+      //   icon: 'fa-test',
+      //   children: [
+      //     {
+      //       name: 'test1',
+      //       icon: 'menu',
+      //       children: [
+      //         {
+      //           name: 'test1-1',
+      //           icon: 'pie-chart',
+      //           type: 'list',
+      //           url: '/test',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
 
       this.$store.commit('SET_ROUTES', menuList);
       storage.set('wms_warehouseIds', res.data.warehouseIds);
@@ -83,11 +104,16 @@ export default {
       const ajaxConfig = storage.get('wms_ajax_config');
       !ajaxConfig && this.$store.commit('SET_AJAX_CONFIG', `/${this.systemType}`);
       const tabList = storage.get('wms_tab_list');
-      !tabList && this.$store.commit('SET_TAB_LIST', [
-        {
-          h: '首页', title: '欢迎', key: `/${this.systemType}`, closable: false,
-        },
-      ]);
+      if (!tabList) {
+        this.$store.commit('SET_TAB_LIST', [
+          {
+            h: '首页',
+            title: '欢迎',
+            key: `/${this.systemType}`,
+            closable: false,
+          },
+        ]);
+      }
     },
     queryAdminRoleMenu() {
       const menuList = [
@@ -97,7 +123,10 @@ export default {
           icon: 'fa-home',
           children: [
             {
-              name: '欢迎', icon: 'menu', type: 'admin', url: '/admin',
+              name: '欢迎',
+              icon: 'menu',
+              type: 'admin',
+              url: '/admin',
             },
           ],
         },
@@ -107,7 +136,10 @@ export default {
           icon: 'fa-set',
           children: [
             {
-              name: '设置导航', icon: 'menu', type: 'authorite', url: '/authorite',
+              name: '设置导航',
+              icon: 'menu',
+              type: 'authorite',
+              url: '/authorite',
             },
           ],
         },
