@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import zhCN from 'ant-design-vue/es/locale-provider/zh_CN';
-import enGB from 'ant-design-vue/es/locale-provider/en_GB';
+// import zhCN from 'ant-design-vue/es/locale-provider/zh_CN';
+// import enGB from 'ant-design-vue/es/locale-provider/en_GB';
+import { loadLanguageAsync } from '@/locale';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
 import localInit from './plugins/localInit';
@@ -11,8 +12,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    CNorEN: true, // 中英文
-    language: zhCN, // 语言包
+    language: storage.get('wms_lang') || 'zh-CN',
     isFold: isPC(), // 导航是否展开
     systemType: storage.get('wms_system_type') || 'welcome', // welcome = 默认管理后台 admin = 超级管理员的管理后台 other = 其他管理后台
     warehouseId: storage.get('wms_warehouse_id') || '', // 当前选中的仓库id
@@ -75,19 +75,26 @@ export default new Vuex.Store({
     },
     // 导航展开
     CHANGE_ISFOLD(state, flag) {
-      flag == null ? state.isFold = !state.isFold : state.isFold = flag;
-    },
-    // 中英文切换
-    CHANGE_LOCALE(state) {
-      state.CNorEN = !state.CNorEN;
-      state.CNorEN ? state.language = zhCN : state.language = enGB;
+      flag == null ? (state.isFold = !state.isFold) : (state.isFold = flag);
     },
     // 定制化路由
     SET_ROUTES(state, routeList) {
       state.routes = routeList;
     },
+    // 设置语言
+    SET_LANG(state, lang) {
+      state.language = lang;
+    },
   },
-  actions: {},
+  actions: {
+    SetLang({ commit }, lang) {
+      return new Promise((resolve) => {
+        commit('SET_LANG', lang);
+        loadLanguageAsync(lang);
+        resolve();
+      });
+    },
+  },
   modules: { admin },
   plugins: [localInit],
 });

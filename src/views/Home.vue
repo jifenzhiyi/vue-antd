@@ -1,19 +1,8 @@
 <template>
   <div class="content">
     <h1>This is an home page</h1>
-    <h2>{{ $isPC() ? '电脑端' : '手机端' }}</h2>
-    <p>
-      <a-radio-group
-        :value="locale"
-        @change="changeLocale">
-        <a-radio-button
-          key="en"
-          value="English">English</a-radio-button>
-        <a-radio-button
-          key="cn"
-          value="中文">中文</a-radio-button>
-      </a-radio-group>
-    </p>
+    <h2>当前访问设备：{{ $isPC() ? '电脑端' : '手机端' }}</h2>
+    <h3>当前国际化：{{ $t('lang') }}</h3>
     <p>
       <a-date-picker
         v-model="value"
@@ -42,14 +31,9 @@ export default {
   data() {
     return {
       value: '',
-      locale: '中文',
     };
   },
   methods: {
-    changeLocale(e) {
-      this.locale = e.target.value;
-      this.$store.commit('CHANGE_LOCALE');
-    },
     onChange(val) {
       console.log('onChange val', val);
     },

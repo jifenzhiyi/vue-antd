@@ -1,6 +1,6 @@
 import { mapState } from 'vuex';
-import { queryRoleMenu } from '@/views/api';
 import storage from '@/utils/storage';
+import { queryRoleMenu } from '@/views/api';
 
 export default {
   computed: mapState(['systemType']),

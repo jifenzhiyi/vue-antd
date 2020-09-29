@@ -42,12 +42,12 @@
           type="user" />{{ name }}
       </a>
       <a-menu slot="overlay">
-        <!-- <a-menu-item>
+        <a-menu-item>
           <a href="javascript:;">
             <a-icon
               slot="icon"
               type="setting" />个人设置</a>
-        </a-menu-item> -->
+        </a-menu-item>
         <a-menu-item>
           <a @click="logout">
             <a-icon
@@ -56,15 +56,21 @@
         </a-menu-item>
       </a-menu>
     </a-dropdown>
+    <!--语言设置-->
+    <toggle-language />
   </header>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import role from '@/mixins/role';
+import ToggleLanguage from 'comps/ToggleLanguage';
 
 export default {
   name: 'BaseHeader',
+  components: {
+    ToggleLanguage,
+  },
   mixins: [role],
   computed: mapState(['isFold', 'routes', 'headerCurrent', 'warehouseId']),
   methods: {
@@ -90,7 +96,7 @@ header {
   .mobile { width: 70px; overflow: hidden; flex: inherit; }
   .icon { padding: 16px; font-size: 20px; }
   .select { width: 100px; }
-  .setting { padding: 8px 16px; }
+  .setting { padding: 8px 16px; color: #666 !important; }
 }
 .anticon { padding-right: 5px; }
 </style>

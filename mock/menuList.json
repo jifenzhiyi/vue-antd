@@ -5,7 +5,7 @@
       {
         "id": 1,
         "name": "用户管理",
-        "icon": "fa-user",
+        "icon": "fa-table",
         "childMenus": [
           {
             "id": 2,
@@ -58,7 +58,7 @@
       {
         "id": 36,
         "name": "日志信息",
-        "icon": "el-icon-edit",
+        "icon": "el-test",
         "childMenus": [
           {
             "id": 37,

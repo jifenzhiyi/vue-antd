@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
+import i18n from './locale';
 import store from './store';
 import router from './router';
 import storage from './utils/storage';
@@ -19,6 +20,7 @@ Vue.use(createComp);
 console.info(`%cv${config.version} (${JSON.stringify(new Date().toLocaleString())})`, 'color: red', 'isPC', isPC());
 
 new Vue({
+  i18n,
   store,
   router,
   render: (h) => h(App),
