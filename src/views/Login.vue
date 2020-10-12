@@ -59,17 +59,19 @@ export default {
       this.form.validateFields((err, values) => !err && this.login(values));
     },
     async login(values) {
-      if (values.account === 'maluAdmin' && values.password === '123456') {
-        console.log('超级管理员登录系统');
-        this.$store.commit('SET_SYSTEM_TYPE', 'admin');
-        storage.set('wms_user_name', values.account);
-        storage.set('wms_user_token', values.account);
-        this.queryAdminRoleMenu();
-        this.$router.push('/admin');
-        return;
-      }
+      // TODO 根据登录返回的管理员角色信息登录不同的管理界面
+      // if (values.account === 'maluAdmin' && values.password === '123456') {
+      //   console.log('超级管理员登录系统');
+      //   this.$store.commit('SET_SYSTEM_TYPE', 'admin');
+      //   storage.set('wms_user_name', values.account);
+      //   storage.set('wms_user_token', values.account);
+      //   this.queryAdminRoleMenu();
+      //   this.$router.push('/admin');
+      //   return;
+      // }
       const res = await login(values);
       if (res) {
+        // 设置管理后台类型 welcome 普通 admin 超级管理员
         this.$store.commit('SET_SYSTEM_TYPE', 'welcome');
         storage.set('wms_user_name', res.data.name);
         storage.set('wms_user_token', res.data.accessToken);

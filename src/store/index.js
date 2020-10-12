@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import zhCN from 'ant-design-vue/es/locale-provider/zh_CN';
-// import enGB from 'ant-design-vue/es/locale-provider/en_GB';
 import { loadLanguageAsync } from '@/locale';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
@@ -49,16 +47,16 @@ export default new Vuex.Store({
     SET_OPEN_KEYS(state, keys) {
       state.openKeys = keys;
     },
-    // 设置标签
+    // 设置导航标签
     SET_TAB_LIST(state, list) {
       state.tabList = list;
     },
-    // 添加标签
+    // 添加导航标签
     ADD_TAB(state, key) {
       const item = state.tabList.find((one) => one.key === key);
       !item && state.tabList.push({ h: state.headerCurrent[0], title: state.asideCurrent[0], key: state.ajaxConfig });
     },
-    // 删除标签
+    // 删除导航标签
     REMOVE_TAB(state, key) {
       const index = state.tabList.findIndex((o) => o.key === key);
       state.tabList.splice(index, 1);

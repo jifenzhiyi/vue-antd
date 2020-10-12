@@ -5,7 +5,7 @@
       {
         "id": 1,
         "name": "用户管理",
-        "icon": "fa-table",
+        "icon": "fa-address-card",
         "childMenus": [
           {
             "id": 2,
@@ -58,7 +58,7 @@
       {
         "id": 36,
         "name": "日志信息",
-        "icon": "fa-test",
+        "icon": "fa-exclamation-triangle",
         "childMenus": [
           {
             "id": 37,

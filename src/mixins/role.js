@@ -6,8 +6,8 @@ export default {
   computed: mapState(['systemType']),
   data() {
     return {
-      name: this.$storage.get('wms_user_name'), // 管理员账号
-      warehouseIds: this.$storage.get('wms_warehouseIds') || [], // 仓库列表
+      name: storage.get('wms_user_name'), // 管理员账号
+      warehouseIds: storage.get('wms_warehouseIds') || [], // 仓库列表
     };
   },
   methods: {
@@ -29,7 +29,7 @@ export default {
               closable: false,
             },
           ]);
-          this.$storage.clear();
+          storage.clear();
           this.$router.push('/login');
         },
       });
@@ -54,47 +54,18 @@ export default {
     },
     async queryRoleMenu() {
       const res = await queryRoleMenu();
-      const noHome = res.data.menuList.find((one) => one.name === '首页');
-      if (!noHome) {
-        res.data.menuList.unshift({
-          name: '首页',
-          icon: 'fa-home',
-          childMenus: [
-            {
-              name: '欢迎',
-              url: '/welcome',
-            },
-          ],
-        });
+      if (res) {
+        const noHome = res.data.menuList.find((one) => one.name === '首页');
+        if (!noHome) {
+          res.data.menuList.unshift({ name: '首页', icon: 'fa-home', childMenus: [{ name: '欢迎', url: '/welcome' }] });
+        }
+        const menuList = this.arrayToMap(res.data.menuList, 0);
+        this.$store.commit('SET_ROUTES', menuList);
+        storage.set('wms_warehouseIds', res.data.warehouseIds);
+        const warehouseId = storage.get('warehouse_id');
+        !warehouseId && this.$store.commit('SET_WAREHOUSE_ID', res.data.warehouseIds[0]);
+        this.initStorage();
       }
-      const menuList = this.arrayToMap(res.data.menuList, 0);
-      // TOTO 测试3级菜单
-      // const current = storage.get('wms_header_current');
-      // menuList.push({
-      //   name: 'TEST',
-      //   isSelect: current ? current[0] === 'TEST' : false,
-      //   icon: 'fa-test',
-      //   children: [
-      //     {
-      //       name: 'test1',
-      //       icon: 'menu',
-      //       children: [
-      //         {
-      //           name: 'test1-1',
-      //           icon: 'pie-chart',
-      //           type: 'list',
-      //           url: '/test',
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // });
-
-      this.$store.commit('SET_ROUTES', menuList);
-      storage.set('wms_warehouseIds', res.data.warehouseIds);
-      const warehouseId = storage.get('warehouse_id');
-      !warehouseId && this.$store.commit('SET_WAREHOUSE_ID', res.data.warehouseIds[0]);
-      this.initStorage();
     },
     initStorage() {
       const headerCurrent = storage.get('wms_header_current');

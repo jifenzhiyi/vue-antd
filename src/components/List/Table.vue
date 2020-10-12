@@ -70,12 +70,10 @@ export default {
   },
   methods: {
     onSelectChange(selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.selectedRowKeys = selectedRowKeys;
     },
     operate(type, record, index) {
       if (type === 'edit') {
-        console.log('options', this.options);
         this.tableData[index].isEdit = !this.tableData[index].isEdit;
         return;
       }
@@ -97,39 +95,6 @@ export default {
         this.$emit('on-update', newData);
       }
     },
-    // edit(key) {
-    //   this.cacheData = this.tableData.map((item) => ({ ...item }));
-    //   const newData = [...this.tableData];
-    //   const target = newData.filter((item) => key === item.key)[0];
-    //   this.editingKey = key;
-    //   if (target) {
-    //     target.editable = true;
-    //     this.$emit('on-update', newData);
-    //   }
-    // },
-    // save(key) {
-    //   const newData = [...this.tableData];
-    //   const newCacheData = [...this.cacheData];
-    //   const target = newData.filter((item) => key === item.key)[0];
-    //   const targetCache = newCacheData.filter((item) => key === item.key)[0];
-    //   if (target && targetCache) {
-    //     delete target.editable;
-    //     this.$emit('on-update', newData);
-    //     Object.assign(targetCache, target);
-    //     this.cacheData = newCacheData;
-    //   }
-    //   this.editingKey = '';
-    // },
-    // cancel(key) {
-    //   const newData = [...this.tableData];
-    //   const target = newData.filter((item) => key === item.key)[0];
-    //   this.editingKey = '';
-    //   if (target) {
-    //     Object.assign(target, this.cacheData.filter((item) => key === item.key)[0]);
-    //     delete target.editable;
-    //     this.$emit('on-update', newData);
-    //   }
-    // },
   },
 };
 </script>

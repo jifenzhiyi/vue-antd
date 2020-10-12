@@ -11,3 +11,6 @@ export const queryRoleMenu = () => request.send('/api/users/queryWarehouseRoleMe
 
 // 列表查询
 export const queryList = (config, data) => request.send(`/api${config}/queryList`, { method: 'POST', data });
+
+// TODO模拟列表查询
+export const queryListTest = (params) => request.send('/api/test/list', { params });

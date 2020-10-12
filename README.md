@@ -1,24 +1,21 @@
-# vue-antd
+# vue-antd 搭建
 
-## Project setup
-```
-yarn install
-```
+## 安装依赖
 
-### Compiles and hot-reloads for development
 ```
-yarn serve
-```
+npm install XXXXXX --save-dev
+or
+yarn add XXXXXX
 
-### Compiles and minifies for production
-```
-yarn build
+XXXXXXX === ant-design-vue, axios, babel-plugin-import, cross-env, vue-i18n, svg-sprite-loader
 ```
 
-### Lints and fixes files
+## 备注
+
 ```
-yarn lint
+待定
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -18,6 +18,31 @@ module.exports = {
       app.post('/api/users/queryWarehouseRoleMenu', (req, res) => {
         res.json(menuData);
       });
+      app.get('/api/test/list', (req, res) => {
+        // console.log(req.query);
+        const lv = req.query.size / 10;
+        const rows = [];
+        for (let i = (req.query.page - 1) * 10; i < 10 * req.query.page * lv; i++) {
+          rows.push({
+            id: i.toString(),
+            name: `Edrward ${i}`,
+            age: 32,
+            address: `London Park no. ${i}`,
+            createAt: Date.parse(new Date()) - i * 1000,
+            disable: false,
+            isEdit: false,
+          });
+        }
+        const result = {
+          code: '0000',
+          data: {
+            total: parseInt(Math.random() * 100, 10) + 10 * req.query.page * lv,
+            rows,
+          },
+          mag: '请求成功',
+        };
+        res.json(result);
+      });
     },
   },
   css: {

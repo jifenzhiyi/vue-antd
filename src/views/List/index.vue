@@ -27,10 +27,15 @@ import ListOperation from 'comps/List/Operation';
 import ListTable from 'comps/List/Table';
 import ListPagination from 'comps/List/Pagination';
 import { formatTime } from '@/utils/help';
-// import { queryList } from '@/views/api';
+import list from '@/mixins/list';
+import {
+  // queryList,
+  queryListTest,
+} from '@/views/api';
 
 export default {
   name: 'ListIndex',
+  mixins: [list],
   computed: mapState(['ajaxConfig', 'warehouseId']),
   components: {
     ListSearch, ListOperation, ListTable, ListPagination,
@@ -62,60 +67,20 @@ export default {
     this.initList();
   },
   methods: {
-    tableUpdate(data) {
-      this.tableData = data;
-    },
-    // 清空数据初始化表格
-    initList() {
-      this.columns = [];
-      this.tableData = [];
-      return this.getList();
-    },
-    // 查询表格
-    search(obj) {
-      this.searchParams = Object.assign(this.searchParams, obj);
-      this.getList(obj);
-    },
-    // 排序查询
-    tableSort(obj) {
-      if (obj.sorter) {
-        this.searchParams.sort_name = obj.sorter.field;
-        if (obj.sorter.order === 'descend') {
-          this.searchParams.order = 'desc';
-        } else if (obj.sorter.order === 'ascend') {
-          this.searchParams.order = 'asc';
-        } else {
-          this.searchParams.sort_name = null;
-          this.searchParams.order = null;
-        }
-      }
-      this.getList({ ...obj.filters });
-    },
     async getList(filters = null) {
       this.loading = true;
       const params = { warehouseId: this.warehouseId, ...this.searchParams, ...filters };
       params.page = this.current;
       params.size = this.pageSize;
-      // console.log('list params', params, 'config', this.ajaxConfig);
-      // const res = await queryList('/roles', params);
-      // console.log('res', res);
-      // this.loading = false;
-      // this.total = res.data.total;
-      // this.tableData = res.data.rows;
-      // TOTO 模拟数据
-      setTimeout(() => {
-        this.loading = false;
-        this.test();
-      }, 1000);
-    },
-    pageChange(num) {
-      this.current = num;
-      this.getList();
-    },
-    sizeChange(current, pageSize) {
-      this.current = current;
-      this.pageSize = pageSize;
-      this.getList();
+      params.config = this.ajaxConfig;
+      this.test();
+      const res = await queryListTest(params);
+      this.loading = false;
+      this.total = res.data.total;
+      this.tableData = res.data.rows.map((one) => {
+        one.createAt = formatTime(one.createAt);
+        return one;
+      });
     },
     // TODO 测试数据，以后删除
     test() {
@@ -168,20 +133,6 @@ export default {
         ],
         scopedSlots: { customRender: 'operation', text: '111' },
       });
-      const data = [];
-      for (let i = (this.current - 1) * 10; i < 10 * this.current; i++) {
-        data.push({
-          id: i.toString(),
-          name: `Edrward ${i}`,
-          age: 32,
-          address: `London Park no. ${i}`,
-          createAt: formatTime(Date.parse(new Date()) - i * 1000),
-          disable: false,
-          isEdit: false,
-        });
-      }
-      this.total = 100;
-      this.tableData = data;
     },
   },
 };
