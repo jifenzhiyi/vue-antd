@@ -11,7 +11,7 @@
       @change="handleTableChange">
       <template
         slot-scope="text, record"
-        v-for="col in colList"
+        v-for="(col, idx) in colList"
         :slot="col">
         <div
           class="ellipsis"
@@ -23,7 +23,11 @@
             :value="text"
             @change="e => handleChange(e.target.value, record.key, col)"/>
           <template v-else>
-            {{ text }}
+            <!--列表默认第一列可以跳转详情页-->
+            <a
+              v-if="idx === 0"
+              @click="goDetails('/details/' + record.id)">{{ text }}</a>
+            <span v-else>{{ text }}</span>
           </template>
         </div>
       </template>
@@ -69,6 +73,9 @@ export default {
     };
   },
   methods: {
+    goDetails(url) {
+      this.$router.push(url);
+    },
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
     },

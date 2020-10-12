@@ -28,6 +28,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: '/details/:id',
+        name: 'details',
+        component: () => import(/* webpackChunkName: "pages" */ '../views/Details/Index.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
         path: '/admin',
         name: 'adminIndex',
         component: () => import(/* webpackChunkName: "pages" */ '../views/Admin/Index.vue'),
