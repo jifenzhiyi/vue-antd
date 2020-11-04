@@ -26,8 +26,14 @@ export default {
     },
   },
   created() {
-    (this.$route.name !== 'login' && this.systemType === 'welcome') && this.queryRoleMenu();
+    (this.$route.name !== 'login' && this.systemType === 'welcome') && this.appInit();
     (this.$route.name !== 'login' && this.systemType === 'admin') && this.queryAdminRoleMenu();
+  },
+  methods: {
+    appInit() {
+      this.getDict();
+      this.queryRoleMenu();
+    },
   },
 };
 </script>

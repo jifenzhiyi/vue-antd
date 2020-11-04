@@ -56,6 +56,9 @@ class Request {
       ? newConfig.params.accessToken = storage.get('wms_user_token')
       : newConfig.data.accessToken = storage.get('wms_user_token');
     newConfig.method === 'GET'
+      ? newConfig.params.warehouseId = storage.get('wms_warehouse_id')
+      : newConfig.data.warehouseId = storage.get('wms_warehouse_id');
+    newConfig.method === 'GET'
       ? newConfig.data = null
       : newConfig.params = null;
     params && params.isLoading && this.startLoading();

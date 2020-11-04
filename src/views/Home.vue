@@ -23,7 +23,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import storage from '@/utils/storage';
 
 export default {
   name: 'Home',
@@ -47,7 +46,7 @@ export default {
       this.$notice_confirm({
         minfo: '确认退出该系统？',
         func: () => {
-          storage.clear();
+          this.$storage.get.clear();
           this.$router.push('/login');
         },
       });

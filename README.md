@@ -7,7 +7,7 @@ npm install XXXXXX --save-dev
 or
 yarn add XXXXXX
 
-XXXXXXX === ant-design-vue, axios, babel-plugin-import, cross-env, vue-i18n, svg-sprite-loader
+XXXXXXX === ant-design-vue axios babel-plugin-import cross-env vue-i18n svg-sprite-loader
 ```
 
 ## 目录结构
@@ -39,9 +39,11 @@ XXXXXXX === ant-design-vue, axios, babel-plugin-import, cross-env, vue-i18n, svg
 ## 备注
 
 ```
-待定
+一些常用的工具网站
+1.https://www.iconfont.cn/
+2.https://antdv.com/docs/vue/introduce-cn/
 ```
 
 ### Customize configuration
 
-See [Configuration Reference](https://www.iconfont.cn/) (https://cli.vuejs.org/config/).
+See [Configuration Reference](https://cli.vuejs.org/config/).

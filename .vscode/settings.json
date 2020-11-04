@@ -1,12 +1,12 @@
 {
   "eslint.options": {
     "configFile": "./.eslintrc.js",
-    "plugins": ["vue"]
+    "plugins": ["vue", "html"]
   },
   "eslint.validate": ["javascript", "javascriptreact", "html", "vue"],
   "prettier.semi": true,
   "prettier.printWidth": 120,
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "all",
   "prettier.proseWrap": "never",

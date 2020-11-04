@@ -1,6 +1,10 @@
 <template>
   <aside :class="[isFold ? 'fold' : '', $isPC() ? 'isPC' : 'isMobile']">
-    <div class="logo">LOGO</div>
+    <div class="logo">
+      <img
+        v-show="isFold"
+        src="@/assets/images/maluLogo.png" />
+    </div>
     <a-menu
       class="menu"
       mode="inline"
@@ -116,6 +120,9 @@ aside {
     height: 44px;
     line-height: 44px;
     text-align: center;
+    img {
+      height: 44px;
+    }
   }
   .menu {
     flex: 1;

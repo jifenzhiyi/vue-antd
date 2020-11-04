@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import storage from '@/utils/storage';
-import Home from '@/views/Home';
 import Login from '@/views/Login';
 import Layout from 'comps/Layouts';
 import Redirect from 'comps/Redirect';
@@ -10,7 +9,7 @@ import notFound from 'comps/404';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', redirect: '/home' },
+  { path: '/', redirect: '/login' },
   {
     path: '/',
     component: Layout,
@@ -18,7 +17,7 @@ const routes = [
       {
         path: '/home',
         name: 'home',
-        component: Home,
+        component: () => import(/* webpackChunkName: "pages" */ '../views/Home.vue'),
         meta: { requiresAuth: true },
       },
       {

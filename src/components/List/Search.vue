@@ -10,14 +10,14 @@
         :key="item.dataIndex"
         :label="item.title">
         <a-input
-          v-if="item.searchType === 'input'"
+          v-if="item.typeFilter === 'input'"
           v-decorator="[item.dataIndex]"
           :placeholder="`请输入${item.title}`" />
         <a-select
           :allowClear="true"
           v-decorator="[item.dataIndex]"
           placeholder="请选择"
-          v-if="item.searchType === 'select'">
+          v-if="item.typeFilter === 'select'">
           <a-select-option
             v-for="one in item.filters"
             :key="one.text"
@@ -27,7 +27,7 @@
         <a-range-picker
           show-time
           format="YYYY-MM-DD HH:mm:ss"
-          v-if="item.searchType === 'date'"
+          v-if="item.typeFilter === 'date'"
           v-decorator="[item.dataIndex]"
           :placeholder="['开始时间', '结束时间']" />
       </a-form-item>
@@ -50,7 +50,7 @@ export default {
   props: ['columns'],
   computed: {
     searchColumns() {
-      return this.columns.filter((o) => o.searchType);
+      return this.columns.filter((o) => o.typeFilter);
     },
   },
   created() {
@@ -110,7 +110,7 @@ export default {
 <style lang="less">
 .ant-form { overflow: hidden; }
 .search_item_one {
-  .ant-form-item-label { width: 72px; }
+  .ant-form-item-label { width: 82px; }
   .ant-form-item-control { min-width: 172px; }
 }
 </style>

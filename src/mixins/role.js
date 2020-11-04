@@ -1,6 +1,6 @@
 import { mapState } from 'vuex';
 import storage from '@/utils/storage';
-import { queryRoleMenu } from '@/views/api';
+import { queryRoleMenu, getDict } from '@/views/api';
 
 export default {
   computed: mapState(['systemType']),
@@ -51,6 +51,16 @@ export default {
         }
         return obj;
       });
+    },
+    async getDict() {
+      const res = await getDict();
+      const dictCodes = res.data.dictCodes;
+      const objArr = [];
+      Object.entries(dictCodes).forEach((one) => {
+        // delete one[1].dictName; 
+        objArr.push({ code: one[0], dict: one[1].dictRow });
+      });
+      storage.set('wms_dicts', objArr);
     },
     async queryRoleMenu() {
       const res = await queryRoleMenu();

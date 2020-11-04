@@ -16,7 +16,7 @@
         <a-menu-item
           v-for="item in routes"
           :key="item.name">
-          <svg-icon :iconClass="item.icon" />{{ item.name }}</a-menu-item>
+          <svg-icon :iconClass="item.icon || 'fa-test'" />{{ item.name }}</a-menu-item>
       </a-menu>
     </nav>
     <!--仓库选择-->
