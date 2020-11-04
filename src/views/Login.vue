@@ -75,6 +75,7 @@ export default {
         this.$store.commit('SET_SYSTEM_TYPE', 'welcome');
         storage.set('wms_user_name', res.data.name);
         storage.set('wms_user_token', res.data.accessToken);
+        this.getDict();
         this.queryRoleMenu();
         this.$notice_success({
           minfo: '登录成功',

@@ -46,7 +46,6 @@ export default {
       options: [], // 表格操作栏
       tableData: [], // 表格数据
       loading: false, // 是否加载
-      dicts: this.$storage.get('wms_dicts'),
       searchParams: {
         order: null,
         sort_name: null,
@@ -69,13 +68,14 @@ export default {
   },
   methods: {
     async pageConfig() {
+      const dictsArr = this.$storage.get('wms_dicts') || [];
       const res = await queryPageUrl({ pageUrl: this.ajaxConfig });
       this.columns = res.data.map((one) => {
         const obj = {};
         this.language === 'zh-CN' && (obj.title = one.lanCn);
         this.language === 'en-US' && (obj.title = one.lanEn);
         obj.typeFilter = one.typeFilter;
-        const dict = this.dicts.find((o) => o.code === one.dictCode);
+        const dict = dictsArr.find((o) => o.code === one.dictCode);
         if (dict) {
           obj.filters = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
         }
