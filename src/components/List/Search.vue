@@ -19,7 +19,7 @@
           placeholder="请选择"
           v-if="item.typeFilter === 'select'">
           <a-select-option
-            v-for="one in item.filters"
+            v-for="one in item.options"
             :key="one.text"
             :value="one.value">{{ one.text }}
           </a-select-option>

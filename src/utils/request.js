@@ -59,6 +59,9 @@ class Request {
       ? newConfig.params.warehouseId = storage.get('wms_warehouse_id')
       : newConfig.data.warehouseId = storage.get('wms_warehouse_id');
     newConfig.method === 'GET'
+      ? newConfig.params.pageUrl = storage.get('wms_ajax_config')
+      : newConfig.data.pageUrl = storage.get('wms_ajax_config');
+    newConfig.method === 'GET'
       ? newConfig.data = null
       : newConfig.params = null;
     params && params.isLoading && this.startLoading();

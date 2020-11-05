@@ -6,7 +6,7 @@
       :data-source="tableData"
       :loading="loading"
       :pagination="false"
-      :rowKey="(row) => row.id"
+      :rowKey="(row) => row.rowKey"
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       @change="handleTableChange">
       <template

@@ -18,13 +18,13 @@ export default {
     // 排序查询
     tableSort(obj) {
       if (obj.sorter) {
-        this.searchParams.sort_name = obj.sorter.field;
+        this.searchParams.sortName = obj.sorter.field;
         if (obj.sorter.order === 'descend') {
           this.searchParams.order = 'desc';
         } else if (obj.sorter.order === 'ascend') {
           this.searchParams.order = 'asc';
         } else {
-          this.searchParams.sort_name = null;
+          this.searchParams.sortName = null;
           this.searchParams.order = null;
         }
       }

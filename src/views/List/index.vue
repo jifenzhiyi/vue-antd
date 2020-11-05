@@ -26,9 +26,8 @@ import ListSearch from 'comps/List/Search';
 import ListOperation from 'comps/List/Operation';
 import ListTable from 'comps/List/Table';
 import ListPagination from 'comps/List/Pagination';
-// import { formatTime } from '@/utils/help';
 import list from '@/mixins/list';
-import { queryPageUrl } from '@/views/api';
+import { queryPageUrl, getList } from '@/views/api';
 
 export default {
   name: 'ListIndex',
@@ -48,7 +47,7 @@ export default {
       loading: false, // 是否加载
       searchParams: {
         order: null,
-        sort_name: null,
+        sortName: null,
       }, // 查询条件
     };
   },
@@ -74,68 +73,40 @@ export default {
         const obj = {};
         this.language === 'zh-CN' && (obj.title = one.lanCn);
         this.language === 'en-US' && (obj.title = one.lanEn);
+        obj.ellipsis = true;
+        obj.dataIndex = one.keyId;
+        obj.sorter = one.isSort === 1;
+        one.scopedSlots = { customRender: obj.keyId };
         obj.typeFilter = one.typeFilter;
         const dict = dictsArr.find((o) => o.code === one.dictCode);
         if (dict) {
-          obj.filters = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
+          obj.options = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
         }
         return obj;
       });
+      this.getList();
     },
     async getList(filters = null) {
-      // this.loading = true;
-      const params = { warehouseId: this.warehouseId, ...this.searchParams, ...filters };
+      this.loading = true;
+      const params = { ...this.searchParams, ...filters };
       params.page = this.current;
       params.size = this.pageSize;
-      params.config = this.ajaxConfig;
-      console.log('getList params', params);
-      // const res = await queryPageUrl(params);
-      // this.loading = false;
-      // this.total = res.data.total;
-      // this.tableData = res.data.rows.map((one) => {
-      //   one.createAt = formatTime(one.createAt);
-      //   return one;
-      // });
+      const res = await getList(this.ajaxConfig, params);
+      this.loading = false;
+      this.total = res.data.total;
+      this.tableData = res.data.rows.map((one, index) => {
+        one.rowKey = this.ajaxConfig.split('/')[2] + index;
+        Object.keys(one).forEach((k) => {
+          const item = this.columns.find((c) => c.dataIndex === k && c.options && c.options.length > 0);
+          if (item) {
+            one[k] = item.options.find((result) => result.value === one[k].toString()).text;
+          }
+        });
+        return one;
+      });
     },
     // TODO 测试数据，以后删除
     // test() {
-    //   this.columns = [
-    //     {
-    //       title: '用户名',
-    //       dataIndex: 'name',
-    //       searchType: 'input',
-    //       sorter: true,
-    //       ellipsis: true,
-    //       scopedSlots: { customRender: 'name' },
-    //     },
-    //     {
-    //       title: '年龄',
-    //       dataIndex: 'age',
-    //       searchType: 'select',
-    //       filters: [
-    //         { text: '未成年', value: '0' },
-    //         { text: '成年', value: '1' },
-    //       ],
-    //       ellipsis: true,
-    //       scopedSlots: { customRender: 'age' },
-    //     },
-    //     {
-    //       title: '地址',
-    //       dataIndex: 'address',
-    //       searchType: 'input',
-    //       sorter: true,
-    //       ellipsis: true,
-    //       scopedSlots: { customRender: 'address' },
-    //     },
-    //     {
-    //       title: '创建时间',
-    //       dataIndex: 'createAt',
-    //       searchType: 'date',
-    //       sorter: true,
-    //       ellipsis: true,
-    //       scopedSlots: { customRender: 'createAt' },
-    //     },
-    //   ];
     //   // TOTO 编辑，删除等
     //   this.columns.push({
     //     title: '操作',

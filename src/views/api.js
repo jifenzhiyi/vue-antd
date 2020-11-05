@@ -14,3 +14,6 @@ export const queryPageUrl = (data) => request.send('/api/configWms/queryPageUrl'
 
 // 获取字典列表
 export const getDict = () => request.send('/api/users/getDict', { method: 'POST' });
+
+// 查询列表接口
+export const getList = (config, data) => request.send(`${config}/queryList`, { method: 'POST', data });
