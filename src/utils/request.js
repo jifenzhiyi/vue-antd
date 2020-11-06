@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import axios from 'axios';
 import { END_POINT } from '@/config';
 import { Modal } from 'ant-design-vue';
@@ -39,6 +40,7 @@ class Request {
       };
     }
     this.client = axios.create(this.config);
+    Vue.prototype.$http = this.client;
     const requestInterceptors = options.requestInterceptors || defaultRequestInterceptors;
     const responseInterceptors = options.responseInterceptors || defaultResponseInterceptors;
     this.startLoading = defaultStartLoading;

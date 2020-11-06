@@ -9,9 +9,9 @@
     <nav :class="!$isPC() && 'mobile'">
       <a-menu
         mode="horizontal"
+        :class="!$isPC() && 'mobile_menu'"
         :selectedKeys="headerCurrent"
         :default-selected-keys="headerCurrent"
-        :class="!$isPC() && 'mobile'"
         @click="handleClick">
         <a-menu-item
           v-for="item in routes"
@@ -75,6 +75,7 @@ export default {
   computed: mapState(['isFold', 'routes', 'headerCurrent', 'warehouseId']),
   methods: {
     handleClick(val) {
+      !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', true);
       this.$store.commit('SET_ROUTES_SELECT', val.key);
     },
     // 左边栏收起展开
@@ -92,8 +93,14 @@ header {
   align-items: center;
   border-bottom: 1px solid #e8e8e8;
   justify-content: space-between;
-  nav { flex: 1; height: 48px; overflow: auto; }
-  .mobile { width: 70px; overflow: hidden; flex: inherit; }
+  nav {
+    flex: 1;
+    height: 48px;
+    display: flex;
+    overflow: auto;
+    &.mobile { overflow: hidden; }
+    .mobile_menu { width: 100px; }
+  }
   .icon { padding: 16px; font-size: 20px; }
   .select { width: 80px; }
   .setting { padding: 8px 12px; color: #666 !important; }

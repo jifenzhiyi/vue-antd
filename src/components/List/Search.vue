@@ -31,14 +31,16 @@
           v-decorator="[item.dataIndex]"
           :placeholder="['开始时间', '结束时间']" />
       </a-form-item>
-      <a-form-item class="search_submit">
+      <a-form-item :class="['search_submit', searchColumns.length <= 2 && 'nobtn']">
         <a-button
           type="primary"
-          html-type="submit">查询</a-button>
+          class="search"
+          html-type="submit">{{ $t('search') }}</a-button>
       </a-form-item>
     </a-form>
     <a-icon
       class="square"
+      v-if="searchColumns.length > 2"
       :type="isShow ? 'minus-square' : 'plus-square'"
       @click="formShow" />
   </div>
@@ -78,11 +80,12 @@ export default {
 .list_search {
   height: 51px;
   display: flex;
+  min-height: 51px;
   overflow: hidden;
   position: relative;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  padding-right: 110px;
+  padding-right: 150px;
   border-bottom: solid 1px #eee;
   form {
     width: 100%;
@@ -101,9 +104,12 @@ export default {
   }
   .search_submit {
     margin: 0;
-    width: 100px;
-    top: 0; right: 0;
+    top: 0; right: 40px;
     position: absolute;
+    &.nobtn { right: 0; }
+    .search {
+      width: 100px;
+    }
   }
 }
 </style>

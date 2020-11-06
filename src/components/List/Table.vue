@@ -2,7 +2,7 @@
   <div class="list_table">
     <a-table
       bordered
-      :columns="columns"
+      :columns="columnsFilter"
       :data-source="tableData"
       :loading="loading"
       :pagination="false"
@@ -59,6 +59,9 @@ export default {
   name: 'ListTable',
   props: ['columns', 'tableData', 'loading'],
   computed: {
+    columnsFilter() {
+      return this.columns.filter((o) => o.isShow);
+    },
     options() {
       const operationList = this.columns.find((item) => item.dataIndex === 'operation');
       return operationList ? operationList.list : [];

@@ -4,14 +4,23 @@
       v-if="$isPC()"
       :columns="columns"
       @on-search="search" />
-    <list-operation v-if="$isPC()" />
+    <list-operation
+      v-if="$isPC()"
+      :columns="columns"
+      @on-change-col="changeCol" />
+    <list-table-mobile
+      v-if="!$isPC()"
+      :columns="columns"
+      :ajaxConfig="ajaxConfig" />
     <list-table
+      v-if="$isPC()"
       :columns="columns"
       :loading="loading"
       :tableData="tableData"
       @on-sort="tableSort"
       @on-update="tableUpdate" />
     <list-pagination
+      v-if="$isPC()"
       :total="total"
       :current="current"
       :pageSize="pageSize"
@@ -25,6 +34,7 @@ import { mapState } from 'vuex';
 import ListSearch from 'comps/List/Search';
 import ListOperation from 'comps/List/Operation';
 import ListTable from 'comps/List/Table';
+import ListTableMobile from 'comps/List/TableMobile';
 import ListPagination from 'comps/List/Pagination';
 import list from '@/mixins/list';
 import { queryPageUrl, getList } from '@/views/api';
@@ -34,7 +44,7 @@ export default {
   mixins: [list],
   computed: mapState(['ajaxConfig', 'warehouseId', 'language']),
   components: {
-    ListSearch, ListOperation, ListTable, ListPagination,
+    ListSearch, ListOperation, ListTable, ListTableMobile, ListPagination,
   },
   data() {
     return {
@@ -66,25 +76,41 @@ export default {
     this.pageConfig();
   },
   methods: {
+    changeCol(obj) {
+      if (obj.checked) {
+        this.columns[obj.index].isShow = obj.checked;
+      } else {
+        const len = this.columns.filter((o) => o.isShow).length;
+        if (len < 3) {
+          this.$message.error('表格列最少必须显示2个');
+          return;
+        }
+        this.columns[obj.index].isShow = obj.checked;
+      }
+    },
     async pageConfig() {
+      if (this.ajaxConfig === '/welcome') return;
       const dictsArr = this.$storage.get('wms_dicts') || [];
       const res = await queryPageUrl({ pageUrl: this.ajaxConfig });
-      this.columns = res.data.map((one) => {
-        const obj = {};
-        this.language === 'zh-CN' && (obj.title = one.lanCn);
-        this.language === 'en-US' && (obj.title = one.lanEn);
-        obj.ellipsis = true;
-        obj.dataIndex = one.keyId;
-        obj.sorter = one.isSort === 1;
-        one.scopedSlots = { customRender: obj.keyId };
-        obj.typeFilter = one.typeFilter;
-        const dict = dictsArr.find((o) => o.code === one.dictCode);
-        if (dict) {
-          obj.options = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
-        }
-        return obj;
-      });
-      this.getList();
+      if (res) {
+        this.columns = res.data.map((one) => {
+          const obj = {};
+          this.language === 'zh-CN' && (obj.title = one.lanCn);
+          this.language === 'en-US' && (obj.title = one.lanEn);
+          obj.ellipsis = true;
+          obj.dataIndex = one.keyId;
+          obj.sorter = one.isSort === 1;
+          one.scopedSlots = { customRender: obj.keyId };
+          obj.typeFilter = one.typeFilter;
+          obj.isShow = true;
+          const dict = dictsArr.find((o) => o.code === one.dictCode);
+          if (dict) {
+            obj.options = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
+          }
+          return obj;
+        });
+        this.$isPC() && this.getList();
+      }
     },
     async getList(filters = null) {
       this.loading = true;

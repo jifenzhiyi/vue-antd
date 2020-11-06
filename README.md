@@ -8,6 +8,8 @@ or
 yarn add XXXXXX
 
 XXXXXXX === ant-design-vue axios babel-plugin-import cross-env vue-i18n svg-sprite-loader
+
+vue-infinite-scroll 手机端列表页插件
 ```
 
 ## 目录结构

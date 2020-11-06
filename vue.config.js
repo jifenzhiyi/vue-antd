@@ -12,7 +12,7 @@ module.exports = {
     host: '0.0.0.0',
   },
   css: {
-    extract: true,
+    extract: false,
     loaderOptions: {
       less: {
         modifyVars: {
