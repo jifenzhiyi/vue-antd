@@ -2,12 +2,15 @@
   <div class="list_main">
     <list-search
       :columns="columns"
+      :searchParams="searchParams"
       @on-search="search" />
     <list-operation
       :columns="columns"
       :tableData="tableData"
       @on-change-col="changeCol"
-      @on-edit-more="editMore" />
+      @on-edit-more="editMore"
+      @on-export="listExport"
+      @on-add="listAdd" />
     <list-table
       v-if="$isPC()"
       :columns="columns"
@@ -110,6 +113,7 @@ export default {
           // obj.slots = { title: one.keyId };
           obj.scopedSlots = { customRender: one.keyId };
           obj.typeFilter = one.typeFilter; // 查询样式
+          one.typeFilter && (this.searchParams[one.keyId] = null);
           obj.typeAdd = one.typeAdd; // 添加样式
           obj.typeModify = one.typeModify; // 更新样式
           one.minWidth && (obj.width = one.minWidth); // 列宽度
@@ -139,6 +143,7 @@ export default {
         obj.name = one.name;
         return obj;
       });
+      console.log('queryWareMenusButton data', data);
       this.$store.commit('SET_BUTTON_LIST', data);
       const udpate = data.find((o) => o.buttonType === 'update');
       if (udpate) {

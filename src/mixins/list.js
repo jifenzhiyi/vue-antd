@@ -1,18 +1,53 @@
+import * as api from '@/views/api';
+
 export default {
   methods: {
+    // 新增数据
+    async listAdd() {
+      console.log('listAdd');
+    },
+    // 列表导出
+    async listExport() {
+      const res = await api.exportList(this.ajaxConfig, this.searchParams);
+      const blob = new Blob([res]);
+      const fileName = `${this.$storage.get('wms_aside_current')[0]}.xlsx`; // 下载文件名称
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        console.log('is IE');
+        window.navigator.msSaveOrOpenBlob(blob, fileName);
+      } else {
+        console.log('is not IE');
+        const elink = document.createElement('a');
+        elink.download = fileName;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href);
+        document.body.removeChild(elink);
+      }
+    },
     // 批量编辑更新列表
     async editMore(list) {
-      console.log('editMore list', list);
-      // TODO 调用更新数据接口
-      // const res = await edit();
+      const newList = [];
+      list.forEach((one) => {
+        const obj = {};
+        this.columns.forEach((item) => {
+          item.typeModify && (obj[item.dataIndex] = one[item.dataIndex]);
+        });
+        newList.push(obj);
+      });
+      await api.updateList(this.ajaxConfig, { products: newList });
       this.getList();
     },
     // 表格数据更新
-    tableUpdate(index) {
+    async tableUpdate(index) {
       this.tableData[index].isSelect = false;
-      console.log('tableUpdate index', index);
-      // TODO 调用更新数据接口
-      // const res = await edit();
+      const obj = {};
+      this.columns.forEach((item) => {
+        item.typeModify && (obj[item.dataIndex] = this.tableData[index][item.dataIndex]);
+      });
+      await api.updateList(this.ajaxConfig, { products: [obj] });
+      this.getList();
     },
     // 取消更新
     tableUpdateCanel(index) {

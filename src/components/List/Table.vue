@@ -40,13 +40,13 @@
               item.type === 'disable'
                 ? (record.disable ? '禁用' : '启用')
                 : item.type === 'edit'
-                  ? (record.isEdit ? '更新' : '编辑')
+                  ? (record.isEdit ? $t('tableUpdate') : $t('tableEdit'))
                   : item.text
             }}
           </a>
           <a
             v-if="record.isEdit"
-            @click="cancelEdit(index)">取消更新</a>
+            @click="cancelEdit(index)">{{ $t('tableUpdateCancel') }}</a>
         </div>
       </template>
     </a-table>

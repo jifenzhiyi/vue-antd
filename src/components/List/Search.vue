@@ -9,16 +9,18 @@
       <a-form-item
         class="search_item_one"
         v-for="item in searchColumns"
-        :key="item.dataIndex"
-        :label="item.title">
+        :key="item.dataIndex">
+        <span slot="label">{{ item.title }}</span>
         <a-input
           v-if="item.typeFilter === 'input'"
           v-decorator="[item.dataIndex]"
-          :placeholder="`请输入${item.title}`" />
+          :placeholder="`${$t('placeholderInput')} ${item.title}`"
+          @focus="inputFocus(item.dataIndex)"
+          @change="inputChange" />
         <a-select
           :allowClear="true"
+          :placeholder="$t('placeholderSelect')"
           v-decorator="[item.dataIndex]"
-          placeholder="请选择"
           v-if="item.typeFilter === 'select'">
           <a-select-option
             v-for="one in item.options"
@@ -31,7 +33,7 @@
           format="YYYY-MM-DD HH:mm:ss"
           v-if="item.typeFilter === 'date'"
           v-decorator="[item.dataIndex]"
-          :placeholder="['开始时间', '结束时间']" />
+          :placeholder="[$t('placeholderStart'), $t('placeholderEnd')]" />
       </a-form-item>
       <a-form-item :class="['search_submit', searchColumns.length <= 2 && 'nobtn']">
         <a-button
@@ -51,7 +53,7 @@
 <script>
 export default {
   name: 'ListSearch',
-  props: ['columns'],
+  props: ['columns', 'searchParams'],
   computed: {
     searchColumns() {
       return this.columns.filter((o) => o.typeFilter);
@@ -62,11 +64,18 @@ export default {
   },
   data() {
     return {
+      focus: '',
       form: null,
       isShow: false,
     };
   },
   methods: {
+    inputFocus(key) {
+      this.focus = key;
+    },
+    inputChange(e) {
+      this.searchParams[this.focus] = e.target.value;
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => !err && this.$emit('on-search', values));
@@ -118,7 +127,7 @@ export default {
 <style lang="less">
 .ant-form { overflow: hidden; }
 .search_item_one {
-  .ant-form-item-label { width: 82px; }
+  .ant-form-item-label { width: 83px; text-overflow:ellipsis; }
   .ant-form-item-control { min-width: 172px; }
 }
 </style>

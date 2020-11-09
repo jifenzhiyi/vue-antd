@@ -17,3 +17,9 @@ export const getList = (config, data) => request.send(`${config}/queryList`, { m
 
 // 列表操作功能
 export const queryWareMenusButton = (data) => request.send('/api/users/queryWareMenusButton', { method: 'POST', data });
+
+// 列表导出
+export const exportList = (config, data) => request.send(`${config}/exportList`, { method: 'POST', data }, { isBlob: true });
+
+// 列表更新
+export const updateList = (config, data) => request.send(`${config}/update`, { method: 'POST', data });

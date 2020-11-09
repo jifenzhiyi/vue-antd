@@ -66,6 +66,7 @@ class Request {
     newConfig.method === 'GET'
       ? newConfig.data = null
       : newConfig.params = null;
+    params && params.isBlob && (newConfig.responseType = 'blob');
     params && params.isLoading && this.startLoading();
     return this.client.request(newConfig)
       .then((res) => {
@@ -73,6 +74,9 @@ class Request {
         if (res.data && res.status !== 200) {
           // TODO ajax请求失败
           return null;
+        }
+        if (params && params.isBlob) {
+          return res.data;
         }
         if (res.data && res.data.code !== '0000') {
           Modal.error({

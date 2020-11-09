@@ -3,21 +3,28 @@
     v-if="$isPC()"
     class="list_operation">
     <div class="btn_list">
-      <!--导入功能-->
       <!-- <a-upload
         name="file"
         :showUploadList="false"
         :before-upload="beforeUpload">
         <a-button><a-icon type="upload" />{{ $t('importFile') }}</a-button>
       </a-upload> -->
-      <!--默认按钮-->
-      <!-- <a-button><a-icon type="export" />{{ $t('listExport') }}</a-button> -->
       <a-button
-        v-if="buttonList && addBtn"><a-icon type="plus" />添加</a-button>
+        v-if="buttonList && exportBtn"
+        @click="exportList">
+        <a-icon type="export" />{{ $t('listExport') }}
+      </a-button>
+      <a-button
+        v-if="buttonList && addBtn"
+        @click="addList">
+        <a-icon type="plus" />{{ $t('listAdd') }}
+      </a-button>
       <a-button
         v-if="buttonList && updateBtn"
         :disabled="tableDataHasSelect.length === 0"
-        @click="moreEdit"><a-icon type="edit" />批量更新</a-button>
+        @click="moreEdit">
+        <a-icon type="edit" />{{ $t('listEdit') }}
+      </a-button>
     </div>
     <div class="hidden_table">
       <a
@@ -52,6 +59,9 @@ export default {
     columnsFilter() {
       return this.columns.filter((o) => o.title !== '操作' && !o.fixed);
     },
+    exportBtn() {
+      return this.buttonList.find((o) => o.buttonType === 'exportList');
+    },
     addBtn() {
       return this.buttonList.find((o) => o.buttonType === 'add');
     },
@@ -85,6 +95,12 @@ export default {
     },
     moreEdit() {
       this.$emit('on-edit-more', this.tableDataHasSelect);
+    },
+    exportList() {
+      this.$emit('on-export');
+    },
+    addList() {
+      this.$emit('on-add');
     },
   },
 };
