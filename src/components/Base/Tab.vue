@@ -20,12 +20,14 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'BaseTab',
-  computed: mapState(['tabList', 'ajaxConfig']),
+  computed: {
+    ...mapState(['tabList', 'ajaxConfig']),
+  },
   methods: {
     tabClick(url) {
       if (url !== this.ajaxConfig) {
         const item = this.tabList.find((one) => one.key === url);
-        // console.log('item', JSON.stringify(item));
+        this.$store.commit('SET_MENUID', item.menuId);
         this.$store.commit('SET_ROUTES_SELECT', item.h);
         this.$store.commit('SET_HEADER_CURRENT', [item.h]);
         this.$store.commit('SET_ASIDE_CURRENT', [item.title]);

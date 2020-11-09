@@ -19,6 +19,8 @@ export default new Vuex.Store({
     openKeys: storage.get('wms_open_keys') || [], // 左边栏展开的菜单
     ajaxConfig: storage.get('wms_ajax_config') || '/welcome', // ajax 接口请求参数
     tabList: storage.get('wms_tab_list') || [],
+    menuId: storage.get('wms_menuId') || null, // 记录当前访问的列表menuId
+    buttonList: storage.get('wms_buttonList') || [],
     routes: [],
   },
   getters: {
@@ -27,6 +29,14 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    // 设置buttonList
+    SET_BUTTON_LIST(state, list) {
+      state.buttonList = list;
+    },
+    // 设置menuId
+    SET_MENUID(state, menuId) {
+      state.menuId = menuId;
+    },
     // 设置系统类型
     SET_SYSTEM_TYPE(state, type) {
       state.systemType = type;
@@ -54,7 +64,12 @@ export default new Vuex.Store({
     // 添加导航标签
     ADD_TAB(state, key) {
       const item = state.tabList.find((one) => one.key === key);
-      !item && state.tabList.push({ h: state.headerCurrent[0], title: state.asideCurrent[0], key: state.ajaxConfig });
+      !item && state.tabList.push({
+        h: state.headerCurrent[0],
+        title: state.asideCurrent[0],
+        key: state.ajaxConfig,
+        menuId: state.menuId,
+      });
     },
     // 删除导航标签
     REMOVE_TAB(state, key) {

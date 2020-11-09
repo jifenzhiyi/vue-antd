@@ -96,8 +96,7 @@ header {
   nav {
     flex: 1;
     height: 48px;
-    display: flex;
-    overflow: auto;
+    overflow: hidden;
     &.mobile { overflow: hidden; }
     .mobile_menu { width: 100px; }
   }

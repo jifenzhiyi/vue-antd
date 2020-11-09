@@ -25,14 +25,14 @@
           <a-menu-item
             v-for="one in item.children"
             :key="one.name"
-            @click="itemClick(one.type, one.url, one.name)">
+            @click="itemClick(one.type, one.url, one.name, one.menuId)">
             <a-icon :type="one.icon" />
             <span>{{ one.name }}</span></a-menu-item>
         </a-sub-menu>
         <a-menu-item
           v-else
           :key="item.name"
-          @click="itemClick(item.type, item.url, item.name)">
+          @click="itemClick(item.type, item.url, item.name, item.menuId)">
           <a-icon :type="item.icon" />
           <span>{{ item.name }}</span></a-menu-item>
       </template>
@@ -88,7 +88,9 @@ export default {
       this.$store.commit('SET_ASIDE_CURRENT', [name]);
       this.$store.commit('ADD_TAB', url);
     },
-    itemClick(type, url, name) {
+    itemClick(type, url, name, menuId) {
+      console.log('itemClick type', type, 'menuId', menuId);
+      this.$store.commit('SET_MENUID', menuId);
       this.$store.commit('SET_AJAX_CONFIG', url);
       this.currentUpdate(name, url);
       `/${type}` !== this.$route.path && this.$router.push(`/${type}`);

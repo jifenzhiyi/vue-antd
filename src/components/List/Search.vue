@@ -1,5 +1,7 @@
 <template>
-  <div :class="['list_search', isShow && 'auto']">
+  <div
+    v-if="$isPC()"
+    :class="['list_search', isShow && 'auto']">
     <a-form
       layout="inline"
       :form="form"

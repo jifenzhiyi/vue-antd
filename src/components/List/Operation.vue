@@ -1,15 +1,23 @@
 <template>
-  <div class="list_operation">
+  <div
+    v-if="$isPC()"
+    class="list_operation">
     <div class="btn_list">
       <!--导入功能-->
-      <a-upload
+      <!-- <a-upload
         name="file"
         :showUploadList="false"
         :before-upload="beforeUpload">
         <a-button><a-icon type="upload" />{{ $t('importFile') }}</a-button>
-      </a-upload>
+      </a-upload> -->
       <!--默认按钮-->
-      <a-button><a-icon type="export" />{{ $t('listExport') }}</a-button>
+      <!-- <a-button><a-icon type="export" />{{ $t('listExport') }}</a-button> -->
+      <a-button
+        v-if="buttonList && addBtn"><a-icon type="plus" />添加</a-button>
+      <a-button
+        v-if="buttonList && updateBtn"
+        :disabled="tableDataHasSelect.length === 0"
+        @click="moreEdit"><a-icon type="edit" />批量更新</a-button>
     </div>
     <div class="hidden_table">
       <a
@@ -21,12 +29,12 @@
         class="menu"
         v-show="isShow">
         <a-menu-item
-          v-for="(item, index) in columns"
+          v-for="(item, index) in columnsFilter"
           :key="index">
           <a-checkbox
             :checked="item.isShow"
             @focus="onFocus(index)"
-            @change.stop="onChange">{{ item.title }}</a-checkbox>
+            @change="onChange">{{ item.title }}</a-checkbox>
         </a-menu-item>
       </a-menu>
     </div>
@@ -34,9 +42,26 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'ListOperation',
-  props: ['columns'],
+  props: ['columns', 'tableData'],
+  computed: {
+    ...mapState(['buttonList']),
+    columnsFilter() {
+      return this.columns.filter((o) => o.title !== '操作' && !o.fixed);
+    },
+    addBtn() {
+      return this.buttonList.find((o) => o.buttonType === 'add');
+    },
+    updateBtn() {
+      return this.buttonList.find((o) => o.buttonType === 'update');
+    },
+    tableDataHasSelect() {
+      return this.tableData.filter((item) => item.isSelect);
+    },
+  },
   data() {
     return {
       index: 0,
@@ -55,7 +80,11 @@ export default {
       this.isShow = !this.isShow;
     },
     onChange(e) {
-      this.$emit('on-change-col', { index: this.index, checked: e.target.checked });
+      const index = this.columns.findIndex((item) => item.title === this.columnsFilter[this.index].title);
+      this.$emit('on-change-col', { index, checked: e.target.checked });
+    },
+    moreEdit() {
+      this.$emit('on-edit-more', this.tableDataHasSelect);
     },
   },
 };

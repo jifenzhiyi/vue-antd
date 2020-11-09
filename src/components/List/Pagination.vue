@@ -1,5 +1,7 @@
 <template>
-  <div class="list_pagination">
+  <div
+    v-if="$isPC()"
+    class="list_pagination">
     <a-pagination
       size="small"
       show-size-changer

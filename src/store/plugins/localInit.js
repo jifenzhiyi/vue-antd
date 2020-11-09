@@ -15,5 +15,7 @@ export default (store) => {
     mutation.type === 'SET_ROUTES' && storage.set('wms_menu_list', state.routes);
     mutation.type === 'SET_AJAX_CONFIG' && storage.set('wms_ajax_config', state.ajaxConfig);
     mutation.type === 'SET_WAREHOUSE_ID' && storage.set('wms_warehouse_id', state.warehouseId);
+    mutation.type === 'SET_MENUID' && storage.set('wms_menuId', state.menuId);
+    mutation.type === 'SET_BUTTON_LIST' && storage.set('wms_buttonList', state.buttonList);
   });
 };

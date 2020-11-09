@@ -1,26 +1,26 @@
 <template>
   <div class="list_main">
     <list-search
-      v-if="$isPC()"
       :columns="columns"
       @on-search="search" />
     <list-operation
-      v-if="$isPC()"
       :columns="columns"
-      @on-change-col="changeCol" />
-    <list-table-mobile
-      v-if="!$isPC()"
-      :columns="columns"
-      :ajaxConfig="ajaxConfig" />
+      :tableData="tableData"
+      @on-change-col="changeCol"
+      @on-edit-more="editMore" />
     <list-table
       v-if="$isPC()"
       :columns="columns"
       :loading="loading"
       :tableData="tableData"
       @on-sort="tableSort"
-      @on-update="tableUpdate" />
+      @on-update="tableUpdate"
+      @on-update-cancel="tableUpdateCanel" />
+    <list-table-mobile
+      v-if="!$isPC()"
+      :columns="columns"
+      :ajaxConfig="ajaxConfig" />
     <list-pagination
-      v-if="$isPC()"
       :total="total"
       :current="current"
       :pageSize="pageSize"
@@ -37,12 +37,14 @@ import ListTable from 'comps/List/Table';
 import ListTableMobile from 'comps/List/TableMobile';
 import ListPagination from 'comps/List/Pagination';
 import list from '@/mixins/list';
-import { queryPageUrl, getList } from '@/views/api';
+import { queryPageUrl, getList, queryWareMenusButton } from '@/views/api';
 
 export default {
   name: 'ListIndex',
   mixins: [list],
-  computed: mapState(['ajaxConfig', 'warehouseId', 'language']),
+  computed: {
+    ...mapState(['ajaxConfig', 'warehouseId', 'language', 'menuId', 'buttonList']),
+  },
   components: {
     ListSearch, ListOperation, ListTable, ListTableMobile, ListPagination,
   },
@@ -74,6 +76,7 @@ export default {
   },
   created() {
     this.pageConfig();
+    this.tableDataCopy = []; // 表格数据备份
   },
   methods: {
     changeCol(obj) {
@@ -90,26 +93,66 @@ export default {
     },
     async pageConfig() {
       if (this.ajaxConfig === '/welcome') return;
-      const dictsArr = this.$storage.get('wms_dicts') || [];
+      const dictsArr = this.$storage.get('wms_dicts') || []; // 数据字典缓存列表
       const res = await queryPageUrl({ pageUrl: this.ajaxConfig });
       if (res) {
+        let lang = 'lanCn'; // 默认中文
+        this.language === 'zh-CN' && (lang = 'lanCn');
+        this.language === 'en-US' && (lang = 'lanEn');
+        this.language === 'fr_FR' && (lang = 'lanFr');
+        this.language === 'ja_JP' && (lang = 'lanJa');
         this.columns = res.data.map((one) => {
           const obj = {};
-          this.language === 'zh-CN' && (obj.title = one.lanCn);
-          this.language === 'en-US' && (obj.title = one.lanEn);
-          obj.ellipsis = true;
-          obj.dataIndex = one.keyId;
-          obj.sorter = one.isSort === 1;
-          one.scopedSlots = { customRender: obj.keyId };
-          obj.typeFilter = one.typeFilter;
-          obj.isShow = true;
+          obj.isShow = true; // 默认显示列
+          obj.title = one[lang]; // 列标题
+          obj.dataIndex = one.keyId; // 列枚举
+          obj.sorter = one.isSort === 1; // 是否需要排序
+          // obj.slots = { title: one.keyId };
+          obj.scopedSlots = { customRender: one.keyId };
+          obj.typeFilter = one.typeFilter; // 查询样式
+          obj.typeAdd = one.typeAdd; // 添加样式
+          obj.typeModify = one.typeModify; // 更新样式
+          one.minWidth && (obj.width = one.minWidth); // 列宽度
+          obj.fixed = one.typeFixed; // 是否固定列
+          obj.fixed && (obj.width = 200);
           const dict = dictsArr.find((o) => o.code === one.dictCode);
           if (dict) {
-            obj.options = Object.entries(dict.dict).map((item) => ({ value: item[0], text: item[1].lanCn }));
+            obj.options = Object.entries(dict.dict).map((item) => ({
+              value: item[0],
+              text: item[1][lang],
+            })); // 是否需要按照数据字典格式化 依据：设置dictCode
           }
           return obj;
         });
-        this.$isPC() && this.getList();
+        Promise.all([
+          this.queryWareMenusButton(),
+          this.getList(),
+        ]);
+      }
+    },
+    async queryWareMenusButton() {
+      const res = await queryWareMenusButton({ menuId: this.menuId });
+      if (!res) return;
+      const data = res.data.buttonList.map((one) => {
+        const obj = {};
+        obj.buttonType = one.buttonType;
+        obj.name = one.name;
+        return obj;
+      });
+      this.$store.commit('SET_BUTTON_LIST', data);
+      const udpate = data.find((o) => o.buttonType === 'update');
+      if (udpate) {
+        this.columns.push({
+          title: '操作',
+          isShow: true,
+          width: 150,
+          fixed: 'right',
+          dataIndex: 'operation',
+          list: [
+            { text: '编辑', type: 'edit' },
+          ],
+          scopedSlots: { customRender: 'operation' },
+        });
       }
     },
     async getList(filters = null) {
@@ -121,31 +164,22 @@ export default {
       this.loading = false;
       this.total = res.data.total;
       this.tableData = res.data.rows.map((one, index) => {
-        one.rowKey = this.ajaxConfig.split('/')[2] + index;
+        one.rowKey = `${this.ajaxConfig.split('/')[2]}-${index}`;
+        one.isEdit = false; // 是否展开编辑模块
+        one.isSelect = false; // 行是否被选中
         Object.keys(one).forEach((k) => {
           const item = this.columns.find((c) => c.dataIndex === k && c.options && c.options.length > 0);
           if (item) {
-            one[k] = item.options.find((result) => result.value === one[k].toString()).text;
+            const o = item.options.find((result) => result.value === one[k].toString());
+            if (o) {
+              one[k] = o.text;
+            }
           }
         });
         return one;
       });
+      this.tableDataCopy = JSON.parse(JSON.stringify(this.tableData));
     },
-    // TODO 测试数据，以后删除
-    // test() {
-    //   // TOTO 编辑，删除等
-    //   this.columns.push({
-    //     title: '操作',
-    //     dataIndex: 'operation',
-    //     ellipsis: true,
-    //     list: [
-    //       { text: '编辑', type: 'edit' },
-    //       { text: '删除', type: 'delete' },
-    //       { text: '禁用', type: 'disable' },
-    //     ],
-    //     scopedSlots: { customRender: 'operation', text: '111' },
-    //   });
-    // },
   },
 };
 </script>

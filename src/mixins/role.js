@@ -48,6 +48,7 @@ export default {
         } else {
           item.url === '/welcome' ? (obj.type = 'home') : (obj.type = 'list');
           obj.url = item.url || item.name;
+          obj.menuId = item.id;
         }
         return obj;
       });

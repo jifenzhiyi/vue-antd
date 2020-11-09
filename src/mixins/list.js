@@ -1,8 +1,25 @@
 export default {
   methods: {
+    // 批量编辑更新列表
+    async editMore(list) {
+      console.log('editMore list', list);
+      // TODO 调用更新数据接口
+      // const res = await edit();
+      this.getList();
+    },
     // 表格数据更新
-    tableUpdate(data) {
-      this.tableData = data;
+    tableUpdate(index) {
+      this.tableData[index].isSelect = false;
+      console.log('tableUpdate index', index);
+      // TODO 调用更新数据接口
+      // const res = await edit();
+    },
+    // 取消更新
+    tableUpdateCanel(index) {
+      this.tableDataCopy[index].isEdit = false;
+      this.tableDataCopy[index].isSelect = false;
+      this.$set(this.tableData, index, this.tableDataCopy[index]);
+      this.tableDataCopy = JSON.parse(JSON.stringify(this.tableData));
     },
     // 清空数据初始化表格
     initList() {

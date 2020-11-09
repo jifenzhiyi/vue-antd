@@ -17,7 +17,7 @@ Vue.prototype.$storage = storage;
 Vue.prototype.$isPC = isPC;
 Vue.use(createComp);
 
-console.info(`%cv${config.version} (${JSON.stringify(new Date().toLocaleString())})`, 'color: red', 'isPC', isPC());
+console.info(`%cv${config.version} (${new Date().toLocaleString()})`, 'color: red');
 
 new Vue({
   i18n,
