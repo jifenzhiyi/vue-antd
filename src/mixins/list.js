@@ -8,6 +8,9 @@ export default {
     inputVerifi(e) {
       this.listAddVerifi[this.inputKey] = !e.target.value;
     },
+    selectVerifi(value) {
+      this.listAddVerifi[this.inputKey] = !value;
+    },
     // 新增表格数据
     async listAddSubmit() {
       Object.entries(this.listAddParams).forEach((item) => {

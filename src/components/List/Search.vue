@@ -11,29 +11,33 @@
         v-for="item in searchColumns"
         :key="item.dataIndex">
         <span slot="label">{{ item.title }}</span>
-        <a-input
-          v-if="item.typeFilter === 'input'"
-          v-decorator="[item.dataIndex]"
-          :placeholder="`${$t('placeholderInput')} ${item.title}`"
-          @focus="inputFocus(item.dataIndex)"
-          @change="inputChange" />
-        <a-select
-          :allowClear="true"
-          :placeholder="$t('placeholderSelect')"
-          v-decorator="[item.dataIndex]"
-          v-if="item.typeFilter === 'select'">
-          <a-select-option
-            v-for="one in item.options"
-            :key="one.text"
-            :value="one.value">{{ one.text }}
-          </a-select-option>
-        </a-select>
-        <a-range-picker
-          show-time
-          format="YYYY-MM-DD HH:mm:ss"
-          v-if="item.typeFilter === 'date'"
-          v-decorator="[item.dataIndex]"
-          :placeholder="[$t('placeholderStart'), $t('placeholderEnd')]" />
+        <div class="text">
+          <a-input
+            v-if="item.typeFilter === 'input'"
+            v-decorator="[item.dataIndex]"
+            :placeholder="`${$t('placeholderInput')} ${item.title}`"
+            @focus="inputFocus(item.dataIndex)"
+            @change="inputChange" />
+          <a-select
+            :allowClear="true"
+            :placeholder="`${$t('placeholderSelect')} ${item.title}`"
+            v-decorator="[item.dataIndex]"
+            v-if="item.typeFilter === 'select'"
+            @focus="inputFocus(item.dataIndex)"
+            @change="selectChange">
+            <a-select-option
+              v-for="one in item.options"
+              :key="one.text"
+              :value="one.value">{{ one.text }}
+            </a-select-option>
+          </a-select>
+          <a-range-picker
+            show-time
+            format="YYYY-MM-DD HH:mm:ss"
+            v-if="item.typeFilter === 'date'"
+            v-decorator="[item.dataIndex]"
+            :placeholder="[$t('placeholderStart'), $t('placeholderEnd')]" />
+        </div>
       </a-form-item>
       <a-form-item :class="['search_submit', searchColumns.length <= 2 && 'nobtn']">
         <a-button
@@ -75,6 +79,9 @@ export default {
     },
     inputChange(e) {
       this.searchParams[this.focus] = e.target.value;
+    },
+    selectChange(value) {
+      this.searchParams[this.focus] = value;
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -127,7 +134,8 @@ export default {
 <style lang="less">
 .ant-form { overflow: hidden; }
 .search_item_one {
-  .ant-form-item-label { width: 83px; text-overflow:ellipsis; }
+  .text { flex: 1; }
+  .ant-form-item-label { width: auto; text-overflow:ellipsis; }
   .ant-form-item-control { min-width: 172px; }
 }
 </style>

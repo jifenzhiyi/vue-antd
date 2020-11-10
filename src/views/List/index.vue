@@ -41,12 +41,27 @@
           <span
             class="ellipsis"
             :title="item.title">{{ item.title }}：</span>
-          <a-input
-            v-if="item.typeAdd === 'input'"
-            v-model="listAddParams[item.dataIndex]"
-            :placeholder="`${$t('placeholderInput')} ${item.title}`"
-            @focus="inputFocus(item.dataIndex)"
-            @blur="inputVerifi" />
+          <div class="text">
+            <a-input
+              v-if="item.typeAdd === 'input'"
+              v-model="listAddParams[item.dataIndex]"
+              :placeholder="`${$t('placeholderInput')} ${item.title}`"
+              @focus="inputFocus(item.dataIndex)"
+              @blur="inputVerifi" />
+            <a-select
+              :allowClear="true"
+              :placeholder="`${$t('placeholderSelect')} ${item.title}`"
+              v-if="item.typeAdd === 'select'"
+              v-model="listAddParams[item.dataIndex]"
+              @focus="inputFocus(item.dataIndex)"
+              @change="selectVerifi">
+              <a-select-option
+                v-for="one in item.options"
+                :key="one.text"
+                :value="one.value">{{ one.text }}
+              </a-select-option>
+            </a-select>
+          </div>
           <div
             v-if="listAddVerifi[item.dataIndex]"
             class="abs error">{{ item.title }}不能为空</div>
@@ -204,20 +219,20 @@ export default {
       this.loading = false;
       this.total = res.data.total;
       this.tableData = res.data.rows.map((one, index) => {
-        one.rowKey = `${this.ajaxConfig.split('/')[2]}-${index}`;
-        one.isEdit = false; // 是否展开编辑模块
-        one.isSelect = false; // 行是否被选中
-        Object.keys(one).forEach((k) => {
-          const item = this.columns.find((c) => c.dataIndex === k && c.options && c.options.length > 0);
-          if (item) {
-            const o = item.options.find((result) => result.value === one[k].toString());
-            if (o) {
-              one[k] = o.text;
-            }
+        const obj = {};
+        obj.rowKey = `${this.ajaxConfig.split('/')[2]}-${index}`;
+        obj.isEdit = false; // 是否展开编辑模块
+        obj.isSelect = false; // 行是否被选中
+        this.columns.forEach((item) => {
+          obj[item.dataIndex] = one[item.dataIndex];
+          if (item.options) {
+            const o = item.options.find((result) => result.value === one[item.dataIndex].toString());
+            obj[`${item.dataIndex}_name`] = o.text;
           }
         });
-        return one;
+        return obj;
       });
+      console.log('tableData', this.tableData);
       this.tableDataCopy = JSON.parse(JSON.stringify(this.tableData));
     },
   },
@@ -248,8 +263,12 @@ export default {
     position: relative;
     align-items: center;
     padding-bottom: 30px;
+    .text {
+      flex: 1;
+      .ant-select { width: 100%; }
+    }
     span {
-      width: 140px;
+      width: 100px;
       color: #999;
       text-align: right;
       &::before {

@@ -16,4 +16,6 @@ export default {
   placeholderSelect: 'Please select',
   placeholderStart: 'start time',
   placeholderEnd: 'end time',
+  submit: 'submit',
+  addTitle: 'List Add',
 };

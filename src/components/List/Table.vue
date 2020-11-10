@@ -25,7 +25,18 @@
             style="margin: -5px 0"
             :value="text"
             @change="e => handleChange(e.target.value, col, index)"/>
-          <span v-else>{{ text }}</span>
+          <a-select
+            v-else-if="record.isEdit && col.typeModify === 'select'"
+            style="width: 100%;"
+            :placeholder="record[`${col.dataIndex}_name`]"
+            @change="value => handleChange(value, col, index)">
+            <a-select-option
+              v-for="one in col.options"
+              :key="one.text"
+              :value="one.value">{{ one.text }}
+            </a-select-option>
+          </a-select>
+          <span v-else>{{ col.options ? record[`${col.dataIndex}_name`] : text }}</span>
         </div>
       </template>
       <template

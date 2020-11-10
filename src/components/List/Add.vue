@@ -1,13 +1,13 @@
 <template>
   <div class="middle addPop">
-    <h3>列表添加</h3>
+    <h3>{{ $t('addTitle') }}</h3>
     <div class="addList">
       <slot></slot>
     </div>
     <div class="addBtn">
       <a-button
         type="primary"
-        @click="addSubmit">提交</a-button>
+        @click="addSubmit">{{ $t('submit') }}</a-button>
     </div>
     <a @click="popHide"><a-icon type="close-circle" /></a>
   </div>
