@@ -26,8 +26,9 @@ export default {
     },
   },
   created() {
-    (this.$route.name !== 'login' && this.systemType === 'welcome') && this.appInit();
-    (this.$route.name !== 'login' && this.systemType === 'admin') && this.queryAdminRoleMenu();
+    if (this.$route.name !== 'login' && this.$route.name !== 'error') {
+      this.systemType === 'admin' ? this.queryAdminRoleMenu() : this.appInit();
+    }
   },
   methods: {
     appInit() {

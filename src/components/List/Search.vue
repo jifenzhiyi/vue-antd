@@ -33,8 +33,8 @@
           </a-select>
           <a-range-picker
             show-time
-            format="YYYY-MM-DD HH:mm:ss"
-            v-if="item.typeFilter === 'date'"
+            :format="item.typeFilter === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss'"
+            v-if="item.typeFilter === 'datetime' || item.typeFilter === 'date'"
             v-decorator="[item.dataIndex]"
             :placeholder="[$t('placeholderStart'), $t('placeholderEnd')]" />
         </div>
@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'ListSearch',
   props: ['columns', 'searchParams'],
@@ -85,7 +87,25 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => !err && this.$emit('on-search', values));
+      this.form.validateFields((err, values) => {
+        this.searchColumns.forEach((item) => {
+          if (item.typeFilter === 'datetime') {
+            if (values[item.dataIndex]) {
+              values[`${item.dataIndex}Start`] = moment(values[item.dataIndex][0]).format('YYYY-MM-DD HH:MM:SS');
+              values[`${item.dataIndex}End`] = moment(values[item.dataIndex][1]).format('YYYY-MM-DD HH:MM:SS');
+              values[item.dataIndex] = null;
+            }
+          }
+          if (item.typeFilter === 'date') {
+            if (values[item.dataIndex]) {
+              values[`${item.dataIndex}Start`] = moment(values[item.dataIndex][0]).format('YYYY-MM-DD');
+              values[`${item.dataIndex}End`] = moment(values[item.dataIndex][1]).format('YYYY-MM-DD');
+              values[item.dataIndex] = null;
+            }
+          }
+        });
+        !err && this.$emit('on-search', values);
+      });
     },
     formShow() {
       this.isShow = !this.isShow;
@@ -135,7 +155,7 @@ export default {
 .ant-form { overflow: hidden; }
 .search_item_one {
   .text { flex: 1; }
-  .ant-form-item-label { width: auto; text-overflow:ellipsis; }
+  .ant-form-item-label { min-width: 82px; text-overflow:ellipsis; }
   .ant-form-item-control { min-width: 172px; }
 }
 </style>

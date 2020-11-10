@@ -3,7 +3,7 @@ import storage from '@/utils/storage';
 import { queryRoleMenu, getDict } from '@/views/api';
 
 export default {
-  computed: mapState(['systemType']),
+  computed: mapState(['systemType', 'language']),
   data() {
     return {
       name: storage.get('wms_user_name'), // 管理员账号
@@ -39,6 +39,8 @@ export default {
       return arr.map((item, idx) => {
         const obj = {};
         obj.name = item.name;
+        obj.name_En = item.name_En;
+        obj.name_Ja = item.name_Ja;
         index === 0 ? (obj.icon = item.icon) : (obj.icon = 'menu');
         if (index === 0) {
           !current ? (obj.isSelect = idx === 0) : (obj.isSelect = current[0] === item.name);
@@ -47,7 +49,7 @@ export default {
           obj.children = this.arrayToMap(item.childMenus, 1);
         } else {
           item.url === '/welcome' ? (obj.type = 'home') : (obj.type = 'list');
-          obj.url = item.url || item.name;
+          obj.url = item.url;
           obj.menuId = item.id;
         }
         return obj;
@@ -68,7 +70,18 @@ export default {
       if (res) {
         const noHome = res.data.menuList.find((one) => one.name === '首页');
         if (!noHome) {
-          res.data.menuList.unshift({ name: '首页', icon: 'fa-home', childMenus: [{ name: '欢迎', url: '/welcome' }] });
+          res.data.menuList.unshift({
+            name: '首页',
+            name_En: 'Home',
+            name_Ja: '首页Ja',
+            icon: 'fa-home',
+            childMenus: [{
+              name: '欢迎',
+              name_En: 'welcome',
+              name_Ja: '欢迎Ja',
+              url: '/welcome',
+            }],
+          });
         }
         const menuList = this.arrayToMap(res.data.menuList, 0);
         this.$store.commit('SET_ROUTES', menuList);
@@ -90,7 +103,9 @@ export default {
         this.$store.commit('SET_TAB_LIST', [
           {
             h: '首页',
+            h_en: 'Home',
             title: '欢迎',
+            title_en: 'Welcome',
             key: `/${this.systemType}`,
             closable: false,
           },

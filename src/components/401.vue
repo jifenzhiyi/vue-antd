@@ -18,11 +18,11 @@ export default {
   mixins: [errorMixin, role],
   data() {
     return {
-      title: '页面丢失。。。',
+      title: '系统错误，请联系管理员。。。',
     };
   },
   created() {
-    this.$route.query.url && (this.title = `未找到对应的接口(${this.$route.query.url})，请联系管理员!`);
+    this.$route.query.code === '0012' && (this.title = `(${this.$route.query.url})接口没有权限，请联系管理员!`);
   },
   methods: {
     appInit() {

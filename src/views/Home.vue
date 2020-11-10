@@ -4,14 +4,10 @@
     <h2>当前访问设备：{{ $isPC() ? '电脑端' : '手机端' }}</h2>
     <h3>当前国际化：{{ $t('lang') }}</h3>
     <p>
-      <a-date-picker
-        v-model="value"
-        @change="onChange" />
+      <a-date-picker v-model="value" />
     </p>
     <p>
-      <a-button
-        type="primary"
-        @click="addRoute">addRoute</a-button>
+      <a-button type="primary">addRoute</a-button>
       <a-button @click="showMessage">showMessage</a-button>
       <a-button type="dashed">Dashed</a-button>
       <a-button
@@ -33,14 +29,8 @@ export default {
     };
   },
   methods: {
-    onChange(val) {
-      console.log('onChange val', val);
-    },
     showMessage() {
       this.$message.info('This is a normal message');
-    },
-    addRoute() {
-      console.log('addRoute');
     },
     logout() {
       this.$notice_confirm({

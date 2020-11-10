@@ -5,6 +5,7 @@ import Login from '@/views/Login';
 import Layout from 'comps/Layouts';
 import Redirect from 'comps/Redirect';
 import notFound from 'comps/404';
+import errorHtml from 'comps/401';
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,8 @@ const routes = [
   },
   { path: '/login', name: 'login', component: Login },
   { path: '/redirect/:path*', component: Redirect },
+  { path: '/error', name: 'error', component: errorHtml },
+  { path: '/404', name: '404', component: notFound },
   { path: '*', name: 'notFound', component: notFound },
 ];
 

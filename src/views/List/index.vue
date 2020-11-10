@@ -162,7 +162,7 @@ export default {
           one.typeFilter && (this.searchParams[one.keyId] = null);
           obj.typeAdd = one.typeAdd; // 添加样式
           if (obj.typeAdd) {
-            this.$set(this.listAddParams, obj.dataIndex, '');
+            this.$set(this.listAddParams, obj.dataIndex, null);
             this.$set(this.listAddVerifi, obj.dataIndex, false);
           }
           obj.typeModify = one.typeModify; // 更新样式
@@ -193,7 +193,6 @@ export default {
         obj.name = one.name;
         return obj;
       });
-      console.log('queryWareMenusButton data', data);
       this.$store.commit('SET_BUTTON_LIST', data);
       const udpate = data.find((o) => o.buttonType === 'update');
       if (udpate) {
@@ -232,7 +231,6 @@ export default {
         });
         return obj;
       });
-      console.log('tableData', this.tableData);
       this.tableDataCopy = JSON.parse(JSON.stringify(this.tableData));
     },
   },
