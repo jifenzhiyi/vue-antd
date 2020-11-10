@@ -29,6 +29,30 @@
       :pageSize="pageSize"
       @on-change-number="pageChange"
       @on-change-size="sizeChange" />
+    <list-add
+      v-show="listAddFlag"
+      @on-add="listAddSubmit"
+      @on-hide="listAdd">
+      <div class="addMain clearfix">
+        <div
+          class="addOne"
+          v-for="item in columnsByAdd"
+          :key="item.dataIndex">
+          <span
+            class="ellipsis"
+            :title="item.title">{{ item.title }}：</span>
+          <a-input
+            v-if="item.typeAdd === 'input'"
+            v-model="listAddParams[item.dataIndex]"
+            :placeholder="`${$t('placeholderInput')} ${item.title}`"
+            @focus="inputFocus(item.dataIndex)"
+            @blur="inputVerifi" />
+          <div
+            v-if="listAddVerifi[item.dataIndex]"
+            class="abs error">{{ item.title }}不能为空</div>
+        </div>
+      </div>
+    </list-add>
   </div>
 </template>
 
@@ -47,6 +71,9 @@ export default {
   mixins: [list],
   computed: {
     ...mapState(['ajaxConfig', 'warehouseId', 'language', 'menuId', 'buttonList']),
+    columnsByAdd() {
+      return this.columns.filter((one) => one.typeAdd);
+    },
   },
   components: {
     ListSearch, ListOperation, ListTable, ListTableMobile, ListPagination,
@@ -55,7 +82,7 @@ export default {
     return {
       total: 0, // 总数
       current: 1, // 当前页
-      pageSize: 10, // 显示条数
+      pageSize: 20, // 显示条数
       columns: [], // 列元素
       options: [], // 表格操作栏
       tableData: [], // 表格数据
@@ -64,6 +91,10 @@ export default {
         order: null,
         sortName: null,
       }, // 查询条件
+      listAddParams: {},
+      listAddVerifi: {},
+      inputKey: null,
+      listAddFlag: false,
     };
   },
   watch: {
@@ -115,6 +146,10 @@ export default {
           obj.typeFilter = one.typeFilter; // 查询样式
           one.typeFilter && (this.searchParams[one.keyId] = null);
           obj.typeAdd = one.typeAdd; // 添加样式
+          if (obj.typeAdd) {
+            this.$set(this.listAddParams, obj.dataIndex, '');
+            this.$set(this.listAddVerifi, obj.dataIndex, false);
+          }
           obj.typeModify = one.typeModify; // 更新样式
           one.minWidth && (obj.width = one.minWidth); // 列宽度
           obj.fixed = one.typeFixed; // 是否固定列
@@ -203,5 +238,31 @@ export default {
   border-radius: 4px;
   flex-direction: column;
   border: solid 1px #eee;
+}
+.addMain {
+  width: 100%;
+  .addOne {
+    width: 50%;
+    float: left;
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding-bottom: 30px;
+    span {
+      width: 140px;
+      color: #999;
+      text-align: right;
+      &::before {
+        color: #f00;
+        content: '* ';
+      }
+    }
+    .error {
+      width: 100%;
+      color: #f00;
+      position: absolute;
+      left: 106px; bottom: 3px;
+    }
+  }
 }
 </style>

@@ -2,9 +2,33 @@ import * as api from '@/views/api';
 
 export default {
   methods: {
-    // 新增数据
-    async listAdd() {
-      console.log('listAdd');
+    inputFocus(key) {
+      this.inputKey = key;
+    },
+    inputVerifi(e) {
+      this.listAddVerifi[this.inputKey] = !e.target.value;
+    },
+    // 新增表格数据
+    async listAddSubmit() {
+      Object.entries(this.listAddParams).forEach((item) => {
+        this.listAddVerifi[item[0]] = !item[1];
+      });
+      const result = Object.values(this.listAddVerifi).every((one) => !one);
+      if (result) {
+        const res = await api.addList(this.ajaxConfig, this.listAddParams);
+        if (res) {
+          this.$message.success(res.msg);
+          Object.keys(this.listAddParams).forEach((key) => {
+            this.listAddParams[key] = null;
+          });
+          this.listAdd();
+          this.getList();
+        }
+      }
+    },
+    // 弹出添加数据层
+    listAdd() {
+      this.listAddFlag = !this.listAddFlag;
     },
     // 列表导出
     async listExport() {

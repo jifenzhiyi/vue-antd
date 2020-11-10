@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import SvgIcon from 'comps/SvgIcon';
+import ListAdd from 'comps/List/Add';
 import MessageBox from 'comps/public/MessageBox';
 
 Vue.component('svg-icon', SvgIcon);
+Vue.component('list-add', ListAdd);
 
 export default {
   initNotice(params) {

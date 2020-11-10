@@ -23,3 +23,6 @@ export const exportList = (config, data) => request.send(`${config}/exportList`,
 
 // 列表更新
 export const updateList = (config, data) => request.send(`${config}/update`, { method: 'POST', data });
+
+// 列表添加
+export const addList = (config, data) => request.send(`${config}/add`, { method: 'POST', data });
