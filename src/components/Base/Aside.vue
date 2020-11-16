@@ -20,7 +20,7 @@
           :key="item.name">
           <span slot="title">
             <a-icon :type="item.icon" />
-            <span>{{ item.name }}</span>
+            <span>{{ language === 'zh-CN' ? item.name : item.nameEn }}</span>
           </span>
           <a-menu-item
             v-for="one in item.children"
