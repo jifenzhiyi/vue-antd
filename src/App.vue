@@ -25,6 +25,11 @@ export default {
       return getLocaleMessage(this.language).antLocale || defaultLanguage;
     },
   },
+  watch: {
+    language() {
+      this.appInit();
+    },
+  },
   created() {
     if (this.$route.name !== 'login' && this.$route.name !== 'error') {
       this.systemType === 'admin' ? this.queryAdminRoleMenu() : this.appInit();

@@ -2,6 +2,8 @@ const path = require('path');
 const htmlConfig = require('./package.json');
 
 const resolve = (dir) => path.join(__dirname, dir);
+const NODE_ENV = process.env.NODE_ENV;
+console.log('NODE_ENV', NODE_ENV);
 
 module.exports = {
   lintOnSave: true,
@@ -12,7 +14,7 @@ module.exports = {
     host: '0.0.0.0',
   },
   css: {
-    extract: false,
+    extract: NODE_ENV === 'prod',
     loaderOptions: {
       less: {
         modifyVars: {

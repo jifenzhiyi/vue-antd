@@ -16,7 +16,9 @@
         <a-menu-item
           v-for="item in routes"
           :key="item.name">
-          <svg-icon :iconClass="item.icon || 'fa-test'" />{{ item.name }}</a-menu-item>
+          <svg-icon :iconClass="item.icon || 'fa-test'" />
+          {{ language === 'zh-CN' ? item.name : item.nameEn }}
+        </a-menu-item>
       </a-menu>
     </nav>
     <!--仓库选择-->
@@ -72,7 +74,9 @@ export default {
     ToggleLanguage,
   },
   mixins: [role],
-  computed: mapState(['isFold', 'routes', 'headerCurrent', 'warehouseId']),
+  computed: {
+    ...mapState(['isFold', 'routes', 'headerCurrent', 'warehouseId', 'language']),
+  },
   methods: {
     handleClick(val) {
       !this.$isPC() && this.$store.commit('CHANGE_ISFOLD', true);

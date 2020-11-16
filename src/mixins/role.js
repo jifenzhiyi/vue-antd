@@ -3,7 +3,7 @@ import storage from '@/utils/storage';
 import { queryRoleMenu, getDict } from '@/views/api';
 
 export default {
-  computed: mapState(['systemType', 'language']),
+  computed: mapState(['systemType']),
   data() {
     return {
       name: storage.get('wms_user_name'), // 管理员账号
@@ -15,32 +15,12 @@ export default {
     warehouseChange(val) {
       this.$store.commit('SET_WAREHOUSE_ID', val);
     },
-    // 退出登录
-    logout() {
-      this.$notice_confirm({
-        minfo: '是否确认退出？',
-        func: () => {
-          !this.$isPC() && this.$store.commit('CHANGE_ISFOLD');
-          this.$store.commit('SET_TAB_LIST', [
-            {
-              h: '首页',
-              title: '欢迎',
-              key: '/welcome',
-              closable: false,
-            },
-          ]);
-          storage.clear();
-          this.$router.push('/login');
-        },
-      });
-    },
     arrayToMap(arr, index) {
       const current = storage.get('wms_header_current');
       return arr.map((item, idx) => {
         const obj = {};
         obj.name = item.name;
-        obj.name_En = item.name_En;
-        obj.name_Ja = item.name_Ja;
+        obj.nameEn = item.nameEn || item.name;
         index === 0 ? (obj.icon = item.icon) : (obj.icon = 'menu');
         if (index === 0) {
           !current ? (obj.isSelect = idx === 0) : (obj.isSelect = current[0] === item.name);
@@ -72,13 +52,11 @@ export default {
         if (!noHome) {
           res.data.menuList.unshift({
             name: '首页',
-            name_En: 'Home',
-            name_Ja: '首页Ja',
+            nameEn: 'Home',
             icon: 'fa-home',
             childMenus: [{
               name: '欢迎',
-              name_En: 'welcome',
-              name_Ja: '欢迎Ja',
+              nameEn: 'welcome',
               url: '/welcome',
             }],
           });
@@ -91,6 +69,30 @@ export default {
         this.initStorage();
       }
     },
+    tabReset() {
+      this.$store.commit('SET_TAB_LIST', [
+        {
+          h: '首页',
+          h_En: 'Home',
+          title: '欢迎',
+          title_En: 'welcome',
+          key: '/welcome',
+          closable: false,
+        },
+      ]);
+    }, 
+    // 退出登录
+    logout() {
+      this.$notice_confirm({
+        minfo: '是否确认退出？',
+        func: () => {
+          !this.$isPC() && this.$store.commit('CHANGE_ISFOLD');
+          this.tabReset();
+          storage.clear();
+          this.$router.push('/login');
+        },
+      });
+    },
     initStorage() {
       const headerCurrent = storage.get('wms_header_current');
       !headerCurrent && this.$store.commit('SET_HEADER_CURRENT', ['首页']);
@@ -99,18 +101,7 @@ export default {
       const ajaxConfig = storage.get('wms_ajax_config');
       !ajaxConfig && this.$store.commit('SET_AJAX_CONFIG', `/${this.systemType}`);
       const tabList = storage.get('wms_tab_list');
-      if (!tabList) {
-        this.$store.commit('SET_TAB_LIST', [
-          {
-            h: '首页',
-            h_en: 'Home',
-            title: '欢迎',
-            title_en: 'Welcome',
-            key: `/${this.systemType}`,
-            closable: false,
-          },
-        ]);
-      }
+      !tabList && this.tabReset();
     },
     queryAdminRoleMenu() {
       const menuList = [

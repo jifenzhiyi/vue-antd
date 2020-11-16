@@ -25,16 +25,18 @@
           <a-menu-item
             v-for="one in item.children"
             :key="one.name"
-            @click="itemClick(one.type, one.url, one.name, one.menuId)">
+            @click="itemClick(one)">
             <a-icon :type="one.icon" />
-            <span>{{ one.name }}</span></a-menu-item>
+            <span>{{ language === 'zh-CN' ? one.name : one.nameEn }}</span>  
+          </a-menu-item>
         </a-sub-menu>
         <a-menu-item
           v-else
           :key="item.name"
-          @click="itemClick(item.type, item.url, item.name, item.menuId)">
+          @click="itemClick(item)">
           <a-icon :type="item.icon" />
-          <span>{{ item.name }}</span></a-menu-item>
+          <span>{{ language === 'zh-CN' ? item.name : item.nameEn }}</span>
+        </a-menu-item>
       </template>
     </a-menu>
     <!--仓库选择-->
@@ -50,7 +52,9 @@
         <a-select-option
           v-for="item in warehouseIds"
           :key="item"
-          :value="item"> {{ item }}</a-select-option>
+          :value="item">
+          {{ item.name }}
+        </a-select-option>
       </a-select>
     </div>
     <!--用户设置-->
@@ -75,25 +79,24 @@ export default {
   name: 'BaseAside',
   mixins: [role],
   computed: {
-    ...mapState(['isFold', 'routes', 'asideCurrent', 'openKeys', 'warehouseId']),
+    ...mapState(['isFold', 'routes', 'asideCurrent', 'openKeys', 'warehouseId', 'language']),
     ...mapGetters(['asideList']),
   },
   methods: {
     openChange(val) {
       this.$store.commit('SET_OPEN_KEYS', val);
     },
-    currentUpdate(name, url) {
+    currentUpdate(one) {
       const item = this.routes.filter((o) => o.isSelect)[0];
-      this.$store.commit('SET_HEADER_CURRENT', [item.name]);
-      this.$store.commit('SET_ASIDE_CURRENT', [name]);
-      this.$store.commit('ADD_TAB', url);
+      this.$store.commit('SET_HEADER_CURRENT', [item.name, item.nameEn]);
+      this.$store.commit('SET_ASIDE_CURRENT', [one.name, one.nameEn]);
+      this.$store.commit('ADD_TAB', one.url);
     },
-    itemClick(type, url, name, menuId) {
-      console.log('itemClick type', type, 'menuId', menuId);
-      this.$store.commit('SET_MENUID', menuId);
-      this.$store.commit('SET_AJAX_CONFIG', url);
-      this.currentUpdate(name, url);
-      `/${type}` !== this.$route.path && this.$router.push(`/${type}`);
+    itemClick(item) {
+      this.$store.commit('SET_MENUID', item.menuId);
+      this.$store.commit('SET_AJAX_CONFIG', item.url);
+      this.currentUpdate(item);
+      `/${item.type}` !== this.$route.path && this.$router.push(`/${item.type}`);
       !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
     },
   },

@@ -66,7 +66,9 @@ export default new Vuex.Store({
       const item = state.tabList.find((one) => one.key === key);
       !item && state.tabList.push({
         h: state.headerCurrent[0],
+        h_En: state.headerCurrent[1],
         title: state.asideCurrent[0],
+        title_En: state.asideCurrent[1],
         key: state.ajaxConfig,
         menuId: state.menuId,
       });

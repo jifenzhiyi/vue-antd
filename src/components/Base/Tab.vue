@@ -9,7 +9,7 @@
       <a-tab-pane
         v-for="one in tabList"
         :key="one.key"
-        :tab="one.title"
+        :tab="language === 'zh-CN' ? one.title : one.title_En"
         :closable="one.closable" />
     </a-tabs>
   </div>
@@ -21,7 +21,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'BaseTab',
   computed: {
-    ...mapState(['tabList', 'ajaxConfig']),
+    ...mapState(['tabList', 'ajaxConfig', 'language']),
   },
   methods: {
     tabClick(url) {
