@@ -97,7 +97,7 @@ export default {
   },
   mounted() {
     const clientWidth = this.$refs.list_table.clientWidth;
-    this.scroll.x = clientWidth + 500;
+    this.scroll.x = clientWidth + 350;
   },
   methods: {
     rowKeyChange(idx) {

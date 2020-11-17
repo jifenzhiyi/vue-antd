@@ -178,15 +178,15 @@ export default {
           }
           return obj;
         });
-        Promise.all([
-          this.queryWareMenusButton(),
-          this.getList(),
-        ]);
       }
+      Promise.all([
+        this.queryWareMenusButton(),
+        this.getList(),
+      ]);
     },
     async queryWareMenusButton() {
       const res = await queryWareMenusButton({ menuId: this.menuId });
-      if (!res) return;
+      if (!res.data) return;
       const data = res.data.buttonList.map((one) => {
         const obj = {};
         obj.buttonType = one.buttonType;

@@ -7,9 +7,9 @@ export default {
       this.$store.commit('SET_TAB_LIST', [
         {
           h: '首页',
-          h_en: 'Home',
+          h_En: 'Home',
           title: '欢迎',
-          title_en: 'Welcome',
+          title_En: 'welcome',
           key: `/${this.systemType}`,
           closable: false,
         },

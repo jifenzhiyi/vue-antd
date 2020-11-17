@@ -20,7 +20,7 @@ export default new Vuex.Store({
     ajaxConfig: storage.get('wms_ajax_config') || '/welcome', // ajax 接口请求参数
     tabList: storage.get('wms_tab_list') || [],
     menuId: storage.get('wms_menuId') || null, // 记录当前访问的列表menuId
-    buttonList: storage.get('wms_buttonList') || [],
+    buttonList: [],
     routes: [],
   },
   getters: {

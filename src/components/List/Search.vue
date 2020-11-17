@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="$isPC()"
+    v-if="$isPC() && searchColumns.length > 0"
     :class="['list_search', isShow && 'auto']">
     <a-form
       layout="inline"
