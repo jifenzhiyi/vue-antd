@@ -104,6 +104,7 @@ export default {
       loading: false, // 是否加载
       searchParams: {
         order: null,
+        orderId: null,
         sortName: null,
       }, // 查询条件
       listAddParams: {},
@@ -178,6 +179,10 @@ export default {
           }
           return obj;
         });
+        // TODO
+        if (this.$route.query.orderId) {
+          this.searchParams.orderId = this.$route.query.orderId;
+        }
       }
       Promise.all([
         this.queryWareMenusButton(),
@@ -195,16 +200,18 @@ export default {
       });
       this.$store.commit('SET_BUTTON_LIST', data);
       const udpate = data.find((o) => o.buttonType === 'update');
-      if (udpate) {
+      const detail = data.find((o) => o.buttonType === 'detail');
+      if (udpate || detail) {
+        const newArr = [];
+        udpate && newArr.push({ text: '编辑', type: 'edit' });
+        detail && newArr.push({ text: '明细', type: 'detail' });
         this.columns.push({
           title: '操作',
           isShow: true,
           width: 150,
           fixed: 'right',
           dataIndex: 'operation',
-          list: [
-            { text: '编辑', type: 'edit' },
-          ],
+          list: newArr,
           scopedSlots: { customRender: 'operation' },
         });
       }
@@ -216,6 +223,7 @@ export default {
       params.size = this.pageSize;
       const res = await getList(this.ajaxConfig, params);
       this.loading = false;
+      if (!res) return;
       this.total = res.data.total;
       this.tableData = res.data.rows.map((one, index) => {
         const obj = {};

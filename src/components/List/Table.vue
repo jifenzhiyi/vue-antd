@@ -65,13 +65,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'ListTable',
   props: ['columns', 'tableData', 'loading'],
   computed: {
-    ...mapState(['buttonList']),
+    ...mapState(['buttonList', 'ajaxConfig', 'asideCurrent']),
+    ...mapGetters(['asideList']),
     columnsFilter() {
       const arr = this.columns.filter((o) => o.isShow);
       return arr;
@@ -126,12 +127,16 @@ export default {
         this.rowKeyChange(idx);
         this.tableData[idx].isEdit = !this.tableData[idx].isEdit;
         !this.tableData[idx].isEdit && this.$emit('on-update', idx);
+      } else if (type === 'detail') {
+        // TODO 根据当前查询订单的订单名称，找到对应的订单明细item进行跳转
+        this.asideList.forEach((one) => {
+          const item = one.children.find((o) => o.name === `${this.asideCurrent[0]}明细`);
+          if (item) {
+            this.$store.dispatch('routeTo', item);
+            this.$router.push(`/list2?orderId=${record.orderId}`);
+          }
+        });
       }
-      // type === 'disable' && (this.tableData[index].disable = !this.tableData[index].disable);
-      // type === 'delete' && this.$notice_confirm({
-      //   minfo: '确认删除该条数据？',
-      //   func: () => this.tableData.splice(index, 1),
-      // });
     },
     // 取消更新
     cancelEdit(idx) {

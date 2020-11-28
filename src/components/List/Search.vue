@@ -3,6 +3,7 @@
     v-if="$isPC() && searchColumns.length > 0"
     :class="['list_search', isShow && 'auto']">
     <a-form
+      ref="form"
       layout="inline"
       :form="form"
       @submit="handleSubmit">
@@ -63,6 +64,20 @@ export default {
   computed: {
     searchColumns() {
       return this.columns.filter((o) => o.typeFilter);
+    },
+  },
+  watch: {
+    columns: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (this.searchColumns.length > 0) {
+          this.$nextTick(() => {
+            const { setFieldsValue } = this.form;
+            this.$route.query.orderId && setFieldsValue({ orderId: this.$route.query.orderId });
+          });
+        }
+      },
     },
   },
   created() {

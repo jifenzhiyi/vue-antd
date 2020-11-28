@@ -86,18 +86,8 @@ export default {
     openChange(val) {
       this.$store.commit('SET_OPEN_KEYS', val);
     },
-    currentUpdate(one) {
-      const item = this.routes.filter((o) => o.isSelect)[0];
-      this.$store.commit('SET_HEADER_CURRENT', [item.name, item.nameEn]);
-      this.$store.commit('SET_ASIDE_CURRENT', [one.name, one.nameEn]);
-      this.$store.commit('ADD_TAB', one.url);
-    },
     itemClick(item) {
-      this.$store.commit('SET_MENUID', item.menuId);
-      this.$store.commit('SET_AJAX_CONFIG', item.url);
-      this.currentUpdate(item);
-      `/${item.type}` !== this.$route.path && this.$router.push(`/${item.type}`);
-      !this.$isPC() && setTimeout(() => this.$store.commit('CHANGE_ISFOLD', false), 0);
+      this.$store.dispatch('routeTo', item);
     },
   },
 };

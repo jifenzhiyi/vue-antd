@@ -125,9 +125,18 @@ export default {
     position: relative;
     .menu {
       z-index: 10;
+      overflow: auto;
+      max-height: 400px;
       position: absolute;
       top: 30px; right: 0;
+      border-radius: 4px;
       border: solid 1px #ccc;
+      .ant-menu-item {
+        border-bottom: solid 1px #f8f8f8;
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
     }
   }
 }

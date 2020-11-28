@@ -28,6 +28,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: '/list2',
+        name: 'list2',
+        component: () => import(/* webpackChunkName: "pages" */ '../views/List/List.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
         path: '/details/:id',
         name: 'details',
         component: () => import(/* webpackChunkName: "pages" */ '../views/Details/Index.vue'),

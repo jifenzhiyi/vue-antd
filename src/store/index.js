@@ -109,6 +109,17 @@ export default new Vuex.Store({
         resolve();
       });
     },
+    routeTo({ state, commit }, item) {
+      // TODO 页面跳转公共化
+      commit('SET_MENUID', item.menuId); // 设置menuId
+      commit('SET_AJAX_CONFIG', item.url); // 接口请求参数设置
+      const one = state.routes.filter((o) => o.isSelect)[0];
+      commit('SET_HEADER_CURRENT', [one.name, one.nameEn]); // 设置顶部导航名称
+      commit('SET_ASIDE_CURRENT', [item.name, item.nameEn]); // 设置侧边栏导航名称
+      commit('ADD_TAB', item.url); // 添加导航标签
+      !isPC() && setTimeout(() => commit('CHANGE_ISFOLD', false), 0); // 导航展开
+      `/${item.type}` !== window.location.pathname && window.router.push(`/${item.type}`);
+    },
   },
   modules: { admin },
   plugins: [localInit],
