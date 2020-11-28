@@ -39,8 +39,10 @@ export default {
   overflow: hidden;
   .main {
     flex: 1;
+    z-index: 1;
     display: flex;
     overflow: hidden;
+    background: #fff;
     flex-direction: column;
     .content {
       flex: 1;
