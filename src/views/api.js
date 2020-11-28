@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 // 登录
-export const login = (data) => request.send('/api/users/login', { method: 'POST', data });
+export const login = (data) => request.send('/api/users/login', { method: 'POST', data }, { isLoading: true });
 
 // 权限控制接口
 export const queryRoleMenu = () => request.send('/api/users/queryWarehouseRoleMenu', { method: 'POST' });
@@ -19,7 +19,7 @@ export const getList = (config, data) => request.send(`${config}/queryList`, { m
 export const queryWareMenusButton = (data) => request.send('/api/users/queryWareMenusButton', { method: 'POST', data });
 
 // 列表导出
-export const exportList = (config, data) => request.send(`${config}/exportList`, { method: 'POST', data }, { isBlob: true });
+export const exportList = (config, data, type) => request.send(`${config}/${type}`, { method: 'POST', data }, { isBlob: true });
 
 // 列表更新
 export const updateList = (config, data) => request.send(`${config}/update`, { method: 'POST', data });

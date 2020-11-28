@@ -1,6 +1,10 @@
+import { mapState } from 'vuex';
 import * as api from '@/views/api';
 
 export default {
+  computed: {
+    ...mapState(['language']),
+  },
   methods: {
     inputFocus(key) {
       this.inputKey = key;
@@ -34,23 +38,26 @@ export default {
       this.listAddFlag = !this.listAddFlag;
     },
     // 列表导出
-    async listExport() {
-      const res = await api.exportList(this.ajaxConfig, this.searchParams);
-      const blob = new Blob([res]);
-      const fileName = `${this.$storage.get('wms_aside_current')[0]}.xlsx`; // 下载文件名称
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        console.log('is IE');
-        window.navigator.msSaveOrOpenBlob(blob, fileName);
-      } else {
-        console.log('is not IE');
-        const elink = document.createElement('a');
-        elink.download = fileName;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href);
-        document.body.removeChild(elink);
+    async listExport(item) {
+      const res = await api.exportList(this.ajaxConfig, this.searchParams, item.buttonType);
+      if (res) {
+        const blob = new Blob([res]);
+        const name = this.language === 'zh-CN' ? item.name : item.nameEn || item.name;
+        const fileName = `${name}.xlsx`; // 下载文件名称
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          console.log('is IE');
+          window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+          console.log('is not IE');
+          const elink = document.createElement('a');
+          elink.download = fileName;
+          elink.style.display = 'none';
+          elink.href = URL.createObjectURL(blob);
+          document.body.appendChild(elink);
+          elink.click();
+          URL.revokeObjectURL(elink.href);
+          document.body.removeChild(elink);
+        }
       }
     },
     // 批量编辑更新列表

@@ -73,7 +73,8 @@ export default {
   computed: {
     ...mapState(['buttonList']),
     columnsFilter() {
-      return this.columns.filter((o) => o.isShow);
+      const arr = this.columns.filter((o) => o.isShow);
+      return arr;
     },
     options() {
       const operationList = this.columns.find((item) => item.dataIndex === 'operation');
@@ -88,16 +89,31 @@ export default {
       const count = this.tableData.filter((item) => item.isSelect).length;
       count === 0 && (this.selectedRowKeys = []);
     },
+    columnsFilter: {
+      immediate: true,
+      deep: true,
+      handler() {
+        const len = this.columnsFilter.length;
+        this.$nextTick(() => {
+          if (len > 0 && this.$refs.list_table) {
+            const clientWidth = this.$refs.list_table.clientWidth;
+            const clientHeight = this.$refs.list_table.clientHeight;
+            if (len * 200 > clientWidth) {
+              this.scroll.x = len * 200;
+            } else {
+              this.scroll.x = 0;
+            }
+            this.scroll.y = clientHeight - 54;
+          }
+        });
+      },
+    },
   },
   data() {
     return {
       selectedRowKeys: [],
-      scroll: { x: 0 },
+      scroll: { x: 0, y: 0 },
     };
-  },
-  mounted() {
-    const clientWidth = this.$refs.list_table.clientWidth;
-    this.scroll.x = clientWidth + 350;
   },
   methods: {
     rowKeyChange(idx) {
@@ -149,7 +165,7 @@ export default {
 <style lang="less" scoped>
 .list_table {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
 }
 .editable-row-operations a { padding-right: 10px; }
 </style>

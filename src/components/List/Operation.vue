@@ -10,9 +10,11 @@
         <a-button><a-icon type="upload" />{{ $t('importFile') }}</a-button>
       </a-upload> -->
       <a-button
-        v-if="buttonList && exportBtn"
-        @click="exportList">
-        <a-icon type="export" />{{ $t('listExport') }}
+        v-for="item in exportBtnList"
+        :key="item.id"
+        @click="exportListNew(item)">
+        <a-icon type="export" />
+        {{ language === 'zh-CN' ? item.name : item.nameEn || item.name }}
       </a-button>
       <a-button
         v-if="buttonList && addBtn"
@@ -53,14 +55,18 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'ListOperation',
-  props: ['columns', 'tableData'],
+  props: ['columns', 'tableData', 'language'],
   computed: {
     ...mapState(['buttonList']),
     columnsFilter() {
       return this.columns.filter((o) => o.title !== '操作' && !o.fixed);
     },
+    exportBtnList() {
+      const arr = this.buttonList.filter((o) => o.buttonType.startsWith('export'));
+      return arr;
+    },
     exportBtn() {
-      return this.buttonList.find((o) => o.buttonType === 'exportList');
+      return this.buttonList.find((o) => o.buttonType.startsWith('export'));
     },
     addBtn() {
       return this.buttonList.find((o) => o.buttonType === 'add');
@@ -96,8 +102,8 @@ export default {
     moreEdit() {
       this.$emit('on-edit-more', this.tableDataHasSelect);
     },
-    exportList() {
-      this.$emit('on-export');
+    exportListNew(item) {
+      this.$emit('on-export', item);
     },
     addList() {
       this.$emit('on-add');

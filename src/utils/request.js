@@ -74,7 +74,7 @@ class Request {
         if (res.data && res.status !== 200) {
           // TODO ajax请求失败
           console.log('status', res.status);
-          res.status === 404 && (window.location.href = `/404?url=${url}`);
+          // res.status === 404 && (window.location.href = `/404?url=${url}`);
           return null;
         }
         if (params && params.isBlob) {
@@ -86,7 +86,7 @@ class Request {
             content: res.data.msg,
             onOk() {
               ['0002', '0006', '0007', '0017'].includes(res.data.code) && (window.location.href = '/login');
-              ['9999', '0012'].includes(res.data.code) && (window.location.href = `/error?code=${res.data.code}&url=${url}`);
+              // ['9999', '0012'].includes(res.data.code) && (window.location.href = `/error?code=${res.data.code}&url=${url}`);
             },
           });
           return null;
