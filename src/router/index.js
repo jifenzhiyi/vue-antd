@@ -24,7 +24,7 @@ const routes = [
       {
         path: '/list',
         name: 'list',
-        component: () => import(/* webpackChunkName: "pages" */ '../views/List/Index.vue'),
+        component: () => import(/* webpackChunkName: "pages" */ '../views/List/List.vue'),
         meta: { requiresAuth: true },
       },
       {
