@@ -15,7 +15,7 @@ export default {
     warehouseChange(val) {
       this.$store.commit('SET_WAREHOUSE_ID', val);
     },
-    arrayToMap(arr, index) {
+    arrayToMap(arr, index, name, nameEn) {
       const current = storage.get('wms_header_current');
       return arr.map((item, idx) => {
         const obj = {};
@@ -23,14 +23,18 @@ export default {
         obj.nameEn = item.nameEn || item.name;
         index === 0 ? (obj.icon = item.icon) : (obj.icon = 'menu');
         if (index === 0) {
+          name = obj.name;
+          nameEn = obj.nameEn;
           !current ? (obj.isSelect = idx === 0) : (obj.isSelect = current[0] === item.name);
         }
         if (item.childMenus && item.childMenus.length > 0) {
-          obj.children = this.arrayToMap(item.childMenus, 1);
+          obj.children = this.arrayToMap(item.childMenus, 1, name, nameEn);
         } else {
           item.url === '/welcome' ? (obj.type = 'home') : (obj.type = 'list');
           obj.url = item.url;
           obj.menuId = item.id;
+          obj.h = name;
+          obj.h_En = nameEn;
         }
         return obj;
       });
@@ -72,11 +76,13 @@ export default {
     tabReset() {
       this.$store.commit('SET_TAB_LIST', [
         {
+          icon: 'menu',
+          name: '欢迎',
+          nameEn: 'welcome',
+          type: 'home',
+          url: '/welcome',
           h: '首页',
           h_En: 'Home',
-          title: '欢迎',
-          title_En: 'welcome',
-          key: '/welcome',
           closable: false,
         },
       ]);

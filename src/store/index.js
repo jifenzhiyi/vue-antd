@@ -61,21 +61,12 @@ export default new Vuex.Store({
     SET_TAB_LIST(state, list) {
       state.tabList = list;
     },
-    // 添加导航标签
-    ADD_TAB(state, key) {
-      const item = state.tabList.find((one) => one.key === key);
-      !item && state.tabList.push({
-        h: state.headerCurrent[0],
-        h_En: state.headerCurrent[1],
-        title: state.asideCurrent[0],
-        title_En: state.asideCurrent[1],
-        key: state.ajaxConfig,
-        menuId: state.menuId,
-      });
+    ADD_TAB(state, item) {
+      !state.tabList.find((one) => one.name === item.name) && state.tabList.push(item);
     },
     // 删除导航标签
-    REMOVE_TAB(state, key) {
-      const index = state.tabList.findIndex((o) => o.key === key);
+    REMOVE_TAB(state, url) {
+      const index = state.tabList.findIndex((o) => o.url === url);
       state.tabList.splice(index, 1);
     },
     // 一级菜单选中
@@ -109,14 +100,13 @@ export default new Vuex.Store({
         resolve();
       });
     },
-    routeTo({ state, commit }, item) {
-      // TODO 页面跳转公共化
+    routeTo({ commit }, item) {
       commit('SET_MENUID', item.menuId); // 设置menuId
       commit('SET_AJAX_CONFIG', item.url); // 接口请求参数设置
-      const one = state.routes.filter((o) => o.isSelect)[0];
-      commit('SET_HEADER_CURRENT', [one.name, one.nameEn]); // 设置顶部导航名称
+      commit('SET_ROUTES_SELECT', item.h); // 一级菜单选中
+      commit('SET_HEADER_CURRENT', [item.h, item.h_En]); // 设置顶部导航名称
       commit('SET_ASIDE_CURRENT', [item.name, item.nameEn]); // 设置侧边栏导航名称
-      commit('ADD_TAB', item.url); // 添加导航标签
+      commit('ADD_TAB', item); // 添加导航标签
       !isPC() && setTimeout(() => commit('CHANGE_ISFOLD', false), 0); // 导航展开
       `/${item.type}` !== window.location.pathname && window.router.push(`/${item.type}`);
     },
