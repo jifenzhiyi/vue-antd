@@ -97,24 +97,12 @@ export default {
     tableData() {
       const count = this.tableData.filter((item) => item.isSelect).length;
       count === 0 && (this.selectedRowKeys = []);
+      this.scrollInit();
     },
     columnsFilter: {
       immediate: true,
-      deep: true,
       handler() {
-        const len = this.columnsFilter.length;
-        this.$nextTick(() => {
-          if (len > 0 && this.$refs.list_table) {
-            const clientWidth = this.$refs.list_table.clientWidth;
-            const clientHeight = this.$refs.list_table.clientHeight;
-            if (len * 200 > clientWidth) {
-              this.scroll.x = len * 200;
-            } else {
-              this.scroll.x = 0;
-            }
-            this.scroll.y = clientHeight - 54;
-          }
-        });
+        this.scrollInit();
       },
     },
   },
@@ -124,7 +112,30 @@ export default {
       scroll: { x: 0, y: 0 },
     };
   },
+  created() {
+    window.addEventListener('resize', this.scrollInit.bind(this));
+  },
   methods: {
+    scrollInit() {
+      this.$nextTick(() => {
+        const len = this.columnsFilter.length;
+        const tableLen = this.tableData.length;
+        if (len > 0 && this.$refs.list_table) {
+          const clientWidth = this.$refs.list_table.clientWidth;
+          const clientHeight = this.$refs.list_table.clientHeight;
+          if (len * 200 > clientWidth) {
+            this.scroll.x = len * 200;
+          } else {
+            this.scroll.x = 0;
+          }
+          if ((tableLen + 1) * 54 > clientHeight) {
+            this.scroll.y = clientHeight - 54;
+          } else {
+            this.scroll.y = 0;
+          }
+        }
+      });
+    },
     rowKeyChange(idx) {
       const index = this.selectedRowKeys.findIndex((o) => parseInt(o.split('-')[1], 10) === idx);
       this.selectedRowKeys.splice(index, 1);
