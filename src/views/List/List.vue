@@ -191,7 +191,10 @@ export default {
     },
     async queryWareMenusButton() {
       const res = await queryWareMenusButton({ menuId: this.menuId });
-      if (!res.data) return;
+      if (!res.data) {
+        this.$store.commit('SET_BUTTON_LIST', []);
+        return;
+      }
       const data = res.data.buttonList.map((one) => {
         const obj = {};
         obj.buttonType = one.buttonType;
