@@ -16,6 +16,7 @@
       :columns="columns"
       :loading="loading"
       :tableData="tableData"
+      :expandedRowRender="expandedRowRender"
       @on-sort="tableSort"
       @on-update="tableUpdate"
       @on-update-cancel="tableUpdateCanel" />
@@ -111,6 +112,7 @@ export default {
       listAddVerifi: {},
       inputKey: null,
       listAddFlag: false,
+      expandedRowRender: false,
     };
   },
   watch: {
@@ -179,6 +181,13 @@ export default {
           }
           return obj;
         });
+        // TODO expandedRowRender
+        if (this.expandedRowRender) {
+          // this.columns.push({ dataIndex: 'expandedRowRender' });
+          this.columns.forEach((o) => {
+            o.fixed = false;
+          });
+        }
         // TODO
         if (this.$route.query.orderId) {
           this.searchParams.orderId = this.$route.query.orderId;
@@ -212,7 +221,7 @@ export default {
           title: '操作',
           isShow: true,
           width: 150,
-          fixed: 'right',
+          fixed: this.expandedRowRender ? null : 'right',
           dataIndex: 'operation',
           list: newArr,
           scopedSlots: { customRender: 'operation' },

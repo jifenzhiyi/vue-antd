@@ -72,9 +72,10 @@ export default {
       deep: true,
       handler() {
         if (this.searchColumns.length > 0) {
+          const orderId = this.$route.query.orderId;
           this.$nextTick(() => {
             const { setFieldsValue } = this.form;
-            this.$route.query.orderId && setFieldsValue({ orderId: this.$route.query.orderId });
+            setFieldsValue({ orderId });
           });
         }
       },

@@ -72,9 +72,7 @@ class Request {
       .then((res) => {
         params && params.isLoading && this.stopLoading();
         if (res.data && res.status !== 200) {
-          // TODO ajax请求失败
-          console.log('status', res.status);
-          // res.status === 404 && (window.location.href = `/404?url=${url}`);
+          Modal.error({ title: res.status, content: res.data.message });
           return null;
         }
         if (params && params.isBlob) {

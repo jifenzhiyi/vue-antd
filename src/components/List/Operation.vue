@@ -59,7 +59,7 @@ export default {
   computed: {
     ...mapState(['buttonList']),
     columnsFilter() {
-      return this.columns.filter((o) => o.title !== '操作' && !o.fixed);
+      return this.columns.filter((o) => o.title !== '操作' && !o.fixed && o.dataIndex !== 'expandedRowRender');
     },
     exportBtnList() {
       const arr = this.buttonList.filter((o) => o.buttonType.startsWith('export'));

@@ -92,7 +92,7 @@ export default {
 
 <style lang="less" scoped>
 header {
-  height: 48px;
+  height: 49px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #e8e8e8;

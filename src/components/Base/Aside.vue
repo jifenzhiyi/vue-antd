@@ -6,7 +6,7 @@
         src="@/assets/images/maluLogo.png" />
     </div>
     <a-menu
-      class="abs menu"
+      class="menu"
       mode="inline"
       :selectedKeys="asideCurrent"
       :default-selected-keys="asideCurrent"
@@ -95,6 +95,7 @@ export default {
 
 <style lang="less" scoped>
 aside {
+  height: 100%;
   display: flex;
   overflow: hidden;
   align-items: center;
@@ -112,8 +113,8 @@ aside {
   &.fold { width: 180px; }
   .logo {
     width: 100%;
-    height: 48px;
-    line-height: 48px;
+    height: 49px;
+    line-height: 49px;
     text-align: center;
     border-bottom: solid 1px #eee;
     img {
@@ -121,10 +122,7 @@ aside {
     }
   }
   .menu {
-    left: 0;
-    top: 49px;
-    bottom: 0;
-    width: 186px;
+    width: 190px;
     border-right: 0;
     overflow-y: auto;
     overflow-x: hidden;

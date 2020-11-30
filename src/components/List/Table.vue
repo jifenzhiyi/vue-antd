@@ -13,6 +13,12 @@
       :row-key="(row) => row.rowKey"
       :row-selection="{ selectedRowKeys, onChange: onSelectChange }"
       @change="handleTableChange">
+      <div
+        slot="expandedRowRender"
+        class="expandedRowRender"
+        v-if="expandedRowRender">
+        <list-table-child />
+      </div>
       <template
         slot-scope="text, record, index"
         v-for="col in columnsFilter"
@@ -66,10 +72,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import ListTableChild from 'comps/List/TableChild';
 
 export default {
   name: 'ListTable',
-  props: ['columns', 'tableData', 'loading'],
+  props: ['columns', 'tableData', 'loading', 'expandedRowRender'],
+  components: { ListTableChild },
   computed: {
     ...mapState(['buttonList', 'ajaxConfig', 'asideCurrent']),
     ...mapGetters(['asideList']),
@@ -168,9 +176,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.list_table {
-  flex: 1;
-  overflow: hidden;
-}
+.list_table { flex: 1; overflow: hidden; }
 .editable-row-operations a { padding-right: 10px; }
+.expandedRowRender { margin: 0; overflow: auto; }
 </style>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { Modal } from 'ant-design-vue';
 import { loadLanguageAsync } from '@/locale';
 import storage from '@/utils/storage';
 import { isPC } from '@/utils/device';
@@ -101,6 +102,10 @@ export default new Vuex.Store({
       });
     },
     routeTo({ commit }, item) {
+      if (!item.url) {
+        Modal.error({ title: '错误', content: '接口url未配置' });
+        return;
+      }
       commit('SET_MENUID', item.menuId); // 设置menuId
       commit('SET_AJAX_CONFIG', item.url); // 接口请求参数设置
       commit('SET_ROUTES_SELECT', item.h); // 一级菜单选中

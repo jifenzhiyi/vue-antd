@@ -25,9 +25,9 @@ export default {
   },
   methods: {
     tabClick(url) {
-      if (url !== this.ajaxConfig) {
+      if (url && url !== this.ajaxConfig) {
         const item = this.tabList.find((one) => one.url === url);
-        this.$store.dispatch('routeTo', item);
+        item && this.$store.dispatch('routeTo', item);
       }
     },
     onEdit(targetKey, action) {
