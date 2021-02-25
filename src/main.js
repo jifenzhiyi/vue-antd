@@ -19,6 +19,10 @@ Vue.use(createComp);
 
 console.info(`%cv${config.version} (${new Date().toLocaleString()})`, 'color: red');
 
+Vue.config.errorHandler = (err) => {
+  console.log('errorHandler', err);
+};
+
 new Vue({
   i18n,
   store,

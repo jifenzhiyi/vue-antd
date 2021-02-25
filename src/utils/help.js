@@ -71,3 +71,27 @@ export const getCurrentMonthLast = (date) => {
   const dateString = new Date(nextMonthFirstDay - oneDay);
   return formatDate(dateString);
 };
+
+// 深copy
+export const deepCopy = (target) => {
+  // 定一个变量
+  let result;
+  if (typeof target === 'object') {
+    if (Array.isArray(target)) {
+      result = [];
+      for (let i = 0; i < target.length; i++) {
+        result.push(deepCopy(target[i]));
+      }
+    } else if (target === null || target.constructor === RegExp) {
+      result = target;
+    } else {
+      result = {};
+      for (let key in target) {
+        result[key] = deepCopy(target[key]);
+      }
+    }
+  } else {
+    result = target;
+  }
+  return  result;
+};

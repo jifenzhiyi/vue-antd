@@ -29,11 +29,12 @@ export default {
 
 <style lang="less" scoped>
 .addPop {
+  z-index: 2;
   width: 700px;
   height: 320px;
   display: flex;
-  padding: 20px 30px;
   position: fixed;
+  padding: 20px 30px;
   border-radius: 6px;
   background: #fff;
   flex-direction: column;
